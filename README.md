@@ -153,10 +153,10 @@ In the sweep.py class, the objective function is called twice. Some optimizer/ob
 ## Example Implementations
 
 ### Basic Sweep Example
-test.py provides a sample use case of the optimizer. 
+main_test.py provides a sample use case of the optimizer. 
 
 ### Detailed Messages
-test_details.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. This implementation sets up the hooks for integration with AntennaCAT in order to provide the user feedback of warnings and errors.
+main_test_details.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. This implementation sets up the hooks for integration with AntennaCAT in order to provide the user feedback of warnings and errors.
 
 ### Realtime Graph
 
@@ -164,7 +164,7 @@ test_details.py provides an example using a parent class, and the self.suppress_
         <img src="https://github.com/LC-Linkous/sweep/blob/main/media/sweep_loc_fitness.png" alt="Example Sweep Convergence (Attempt)" height="200">
 </p>
 
-test_graph.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. Additionally, a realtime graph shows particle locations at every step.
+main_test_graph.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. Additionally, a realtime graph shows particle locations at every step.
 
 The figure above is a snapshot of the search. The left shows all of the search locations of a single particle (NOTE: toggle a the 'clear' boolean to turn this feature off), and the right side shows the target (marked by a star) and the fitness function locations (the open circles). While the fitness of the particle is very close to the target, it does not come closer than the 10E-6 tolerance, so the search does not converge.
 
