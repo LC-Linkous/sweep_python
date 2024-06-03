@@ -111,13 +111,13 @@ class TestGraph():
         
         # MOVEMENT PLOT
         if np.shape(m_coords)[0] == 2: #2-dim func
-            self.ax1.set_title("Particle Location")
+            self.ax1.set_title("Particle/Agent Location")
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.scatter = self.ax1.scatter(m_coords[0, :], m_coords[1, :], edgecolors='b')
 
         elif np.shape(m_coords)[0] == 3: #3-dim func
-            self.ax1.set_title("Particle Location")
+            self.ax1.set_title("Particle/Agent Location")
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.ax1.set_zlabel("$x_3$")
@@ -126,13 +126,13 @@ class TestGraph():
 
         # FITNESS PLOT
         if np.shape(f_coords)[0] == 2: #2-dim obj func
-            self.ax2.set_title("Fitness Relation to Target")
+            self.ax2.set_title("Global Best Fitness Relation to Target")
             self.ax2.set_xlabel("$F_{1}(x,y)$")
             self.ax2.set_ylabel("$F_{2}(x,y)$")
             self.scatter = self.ax2.scatter(f_coords[0, :], f_coords[1, :], marker='o', s=40, facecolor="none", edgecolors="k")
 
         elif np.shape(f_coords)[0] == 3: #3-dim obj fun
-            self.ax2.set_title("Fitness Relation to Target")
+            self.ax2.set_title("Global Best Fitness Relation to Target")
             self.ax2.set_xlabel("$F_{1}(x,y)$")
             self.ax2.set_ylabel("$F_{2}(x,y)$")
             self.ax2.set_zlabel("$F_{3}(x,y)$")
