@@ -2,12 +2,12 @@
 
 ##--------------------------------------------------------------------\
 #   sweep
-#   './sweep/src/test_details.py'
+#   './sweep/src/main_test_details.py'
 #   Test function/example for using the 'sweep' class in sweep.py.
 #   Format updates are for integration in the AntennaCAT GUI.
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: May 31, 2024
+#   Last update: June 3, 2024
 ##--------------------------------------------------------------------\
 
 

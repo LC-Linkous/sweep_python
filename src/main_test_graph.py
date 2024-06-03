@@ -2,14 +2,14 @@
 
 ##--------------------------------------------------------------------\
 #   sweep
-#   './sweep/src/test_graph.py'
+#   './sweep/src/main_test_graph.py'
 #   Test function/example for using the 'sweep' class in sweep.py.
 #   Format updates are for integration in the AntennaCAT GUI.
 #   This version builds from 'test_details.py' to include a 
 #       matplotlib plot of particle location
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: May 31, 2024
+#   Last update:June 3, 2024
 ##--------------------------------------------------------------------\
 
 
