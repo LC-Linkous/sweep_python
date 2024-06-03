@@ -87,7 +87,7 @@ class TestDetails():
         pass
          
 
-    def run_sweep(self):
+    def run(self):
 
         # instantiation of particle swarm optimizer 
         while not self.mySweep.complete():
@@ -118,4 +118,4 @@ class TestDetails():
 
 if __name__ == "__main__":
     td = TestDetails()
-    td.run_sweep()
+    td.run()

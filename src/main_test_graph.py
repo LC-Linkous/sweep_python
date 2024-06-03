@@ -153,7 +153,7 @@ class TestGraph():
 
 
 
-    def run_sweep(self):
+    def run(self):
         
 
         # instantiation of particle swarm optimizer 
@@ -187,4 +187,4 @@ class TestGraph():
 
 if __name__ == "__main__":
     tg = TestGraph()
-    tg.run_sweep()
+    tg.run()
