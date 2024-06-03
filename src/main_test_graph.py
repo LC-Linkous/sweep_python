@@ -9,7 +9,7 @@
 #       matplotlib plot of particle location
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update:June 3, 2024
+#   Last update: June 3, 2024
 ##--------------------------------------------------------------------\
 
 
@@ -95,7 +95,7 @@ class TestGraph():
         pass
          
 
-    def update_plot(self, m_coords, f_coords, targets, showTarget, clearAx=False, setLimts=False):
+    def update_plot(self, m_coords, f_coords, targets, showTarget, clearAx=True, setLimts=False):
         # if self.scatter is None:
         if clearAx == True:
             self.ax1.clear() #use this to git rid of the 'ant tunnel' trails
@@ -111,11 +111,13 @@ class TestGraph():
         
         # MOVEMENT PLOT
         if np.shape(m_coords)[0] == 2: #2-dim func
+            self.ax1.set_title("Particle Location")
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.scatter = self.ax1.scatter(m_coords[0, :], m_coords[1, :], edgecolors='b')
 
         elif np.shape(m_coords)[0] == 3: #3-dim func
+            self.ax1.set_title("Particle Location")
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.ax1.set_zlabel("$x_3$")
@@ -124,11 +126,13 @@ class TestGraph():
 
         # FITNESS PLOT
         if np.shape(f_coords)[0] == 2: #2-dim obj func
+            self.ax2.set_title("Fitness Relation to Target")
             self.ax2.set_xlabel("$F_{1}(x,y)$")
             self.ax2.set_ylabel("$F_{2}(x,y)$")
             self.scatter = self.ax2.scatter(f_coords[0, :], f_coords[1, :], marker='o', s=40, facecolor="none", edgecolors="k")
 
         elif np.shape(f_coords)[0] == 3: #3-dim obj fun
+            self.ax2.set_title("Fitness Relation to Target")
             self.ax2.set_xlabel("$F_{1}(x,y)$")
             self.ax2.set_ylabel("$F_{2}(x,y)$")
             self.ax2.set_zlabel("$F_{3}(x,y)$")
@@ -173,7 +177,7 @@ class TestGraph():
                     print(self.best_eval)
             m_coords = self.mySweep.M  #get x,y,z coordinate locations
             f_coords = self.mySweep.F_Gb # global best of set
-            self.update_plot(m_coords, f_coords, self.targets, showTarget=True) #update matplot
+            self.update_plot(m_coords, f_coords, self.targets, showTarget=True, clearAx=False) #update matplot
 
         print("Optimized Solution")
         print(self.mySweep.get_optimized_soln())
