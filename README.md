@@ -56,7 +56,6 @@ More search types will be added, but for initial deployment, a standard grid sea
 
 The variables from PSO_python have been reused to retain modularity with AntennaCAT and provide some consistency between optimizers. 
 
-```python
 ```
             self.M                      : An array of current search location(s).
             self.output_size            : An integer value for the output size of obj func
@@ -79,7 +78,6 @@ The variables from PSO_python have been reused to retain modularity with Antenna
             self.Flist                  : List to store fitness values.
             self.Fvals                  : List to store fitness values.
             self.Mlast                  : Last search location
-```
 ```
 
 ```python
@@ -167,6 +165,8 @@ test_details.py provides an example using a parent class, and the self.suppress_
 </p>
 
 test_graph.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. Additionally, a realtime graph shows particle locations at every step.
+
+The figure above is a snapshot of the search. The left shows all of the search locations of a single particle (NOTE: toggle a the 'clear' boolean to turn this feature off), and the right side shows the target (marked by a star) and the fitness function locations (the open circles). While the fitness of the particle is very close to the target, it does not come closer than the 10E-6 tolerance, so the search does not converge.
 
 NOTE: if you close the graph as the code is running, the code will continue to run, but the graph will not re-open.
 
