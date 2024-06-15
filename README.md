@@ -1,12 +1,13 @@
 # sweep
 
-Simple sweep optimizer written in Python. Currently uses a basic grid search
+Simple sweep optimizer written in Python. Currently uses a basic grid search.
 
 The format is based off of the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000) for data collection baseline. This repo does not feature any PSO optimization. Instead, the format has been used to retain modularity with other optimizers.
 
 Now featuring AntennaCAT hooks for GUI integration and user input handling.
 
 ## Table of Contents
+* [Sweep Optimization](#sweep-optimization)
 * [Requirements](#requirements)
 * [Implementation](#implementation)
     * [Constraint Handling](#constraint-handling)
@@ -22,7 +23,15 @@ Now featuring AntennaCAT hooks for GUI integration and user input handling.
     * [Realtime Graph](#realtime-graph)
 * [References](#references)
 * [Publications and Integration](#publications-and-integration)
+* [How to Cite](#how-to-cite)
 * [Licensing](#licensing)  
+
+## Sweep Optimization
+
+### Grid-based Sweep Optimizer
+
+A grid-based sweep optimizer, often referred to as grid search, is a simple yet effective optimization technique commonly used for hyperparameter tuning in machine learning models. This method systematically explores a specified subset of the hyperparameter space by evaluating the performance of a model with all possible combinations of the provided hyperparameter values.
+
 
 ## Requirements
 
@@ -82,7 +91,7 @@ The variables from PSO_python have been reused to retain modularity with Antenna
 
 ```python
         # Constant variables
-        NO_OF_PARTICLES = 1              # Number of indpendent agents searching the space
+        NO_OF_PARTICLES = 1              # Number of independent agents searching the space
         LB = func_configs.LB             # Lower boundaries
         UB = func_configs.UB             # Upper boundaries
         OUT_VARS = func_configs.OUT_VARS # Number of output variables (y-values)
@@ -97,7 +106,6 @@ The variables from PSO_python have been reused to retain modularity with Antenna
 ```
 
 
-
 #### basic_grid
 
 The basic grid search uses the current position of a particle (or agent), and increments it one step towards the upper bounds based on the
@@ -106,7 +114,6 @@ defined problem space. It can use 1 or more particles (or agents) to search a sp
 Resolution is a multi-dimensional vector to allow for tuning in all dimensions of the input space. 
 
 This method does not tend to converge with a small error tolerance.
-
 
 ### Multi-Object Optimization
 The no preference method of multi-objective optimization, but a Pareto Front is not calculated. Instead the best choice (smallest norm of output vectors) is listed as the output.
@@ -117,10 +124,9 @@ The optimizer minimizes the absolute value of the difference from the target out
 #### Internal Objective Function Example
 The current internal optimization function takes 3 inputs, and has 2 outputs. It was created as a simple 3-variable optimization objective function that would be quick to converge.  
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/obj_func_pareto.png" alt="Function Feasable Decision Space and Objective Space with Pareto Front" height="200">
+        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/obj_func_pareto.png" alt="Function Feasible Decision Space and Objective Space with Pareto Front" height="200">
 </p>
-   <p align="center">Function Feasable Decision Space and Objective Space with Pareto Front</p>
-
+   <p align="center">Function Feasible Decision Space and Objective Space with Pareto Front</p>
 
 ```math
 \text{minimize}: 
@@ -134,13 +140,12 @@ f_{2}(\mathbf{x}) = (x_3-0.2)^4
 |----------|----------|----------|
 | 3      | $0.21\leq x_1\leq 1$ <br> $0\leq x_2\leq 1$ <br> $0.1 \leq x_3\leq 0.5$  | $x_3\gt \frac{x_1}{2}$ or $x_3\lt 0.1$| 
 
-
 This function has three files:
    1) configs_F.py - contains imports for the objective function and constraints, CONSTANT assignments for functions and labeling, boundary ranges, the number of input variables, the number of output values, and the target values for the output
    2) constr_F.py - contains a function with the problem constraints, both for the function and for error handling in the case of under/overflow. 
    3) func_F.py - contains a function with the objective function.
 
-Other multi-objective functions can be applied to this project by following the same format (and several have been collected into a compatable library, and will be realeased in a seperate repo)
+Other multi-objective functions can be applied to this project by following the same format (and several have been collected into a compatible library, and will be released in a separate repo)
 
 ## Error Handling
 
@@ -148,7 +153,6 @@ In the sweep.py class, the objective function is called twice. Some optimizer/ob
 
  * 1) When the constraints are called to verify if the particle is in bounds, and to apply the selected boundary method. At this point, the 'noErrors' boolean is used to confirm if the objection function resolves. If the objective function does not resolve, or the particle is out of bounds, the boundary conditions are applied.
  * 2) To evaluate the objective function as part of the traditional particle swarm algorithm
-
 
 ## Example Implementations
 
@@ -170,15 +174,25 @@ The figure above is a snapshot of the search. The left shows all of the search l
 
 NOTE: if you close the graph as the code is running, the code will continue to run, but the graph will not re-open.
 
-
 ## References
-TODO: add in references to papers as search options are added
+
+This repo does not currently reference any code of papers for the sweep algorithm.
+
+For the original code base, see the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000)
 
 ## Publications and Integration
 This software works as a stand-alone implementation, and as one of the optimizers integrated into AntennaCAT.
 
 Publications featuring the code in this repo will be added as they become public.
 
+## How to Cite
+
+This is a basic sweep algorithm, and as such is not based on any particular code, repo, or publication.
+
+If you wish to cite this, either cite the repository, or the tie-in AntennaCAT publication
+
 ## Licensing
 
 The code in this repository has been released under GPL-2.0
+
+
