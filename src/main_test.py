@@ -7,7 +7,7 @@
 #   Format updates are for integration in the AntennaCAT GUI.
 #
 #   Author(s): Jonathan Lundquist, Lauren Linkous
-#   Last update: June 3, 2024
+#   Last update: June 14, 2024
 ##--------------------------------------------------------------------\
 
 
