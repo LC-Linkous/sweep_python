@@ -163,7 +163,7 @@ The optimizer minimizes the absolute value of the difference from the target out
 #### Internal Objective Function Example
 The current internal optimization function takes 3 inputs, and has 2 outputs. It was created as a simple 3-variable optimization objective function that would be quick to converge.  
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/obj_func_pareto.png" alt="Function Feasible Decision Space and Objective Space with Pareto Front" height="200">
+        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/obj_func_pareto.png" alt="Function Feasible Decision Space and Objective Space with Pareto Front" height="250">
 </p>
    <p align="center">Function Feasible Decision Space and Objective Space with Pareto Front</p>
 
@@ -204,13 +204,13 @@ main_test_details.py provides an example using a parent class, and the self.supp
 ### Realtime Graph
 
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/grid_sweep.gif" alt="Example Grid Sweep Convergence (Attempt)" height="200">
+        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/grid_sweep.gif" alt="Example Grid Sweep Convergence (Attempt)" height="250">
 </p>
 <br>
 <br>
 <br>
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/random_sweep.gif" alt="Example Random Sweep Convergence (Attempt)" height="200">
+        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/random_sweep.gif" alt="Example Random Sweep Convergence (Attempt)" height="250">
 </p>
 
 main_test_graph.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. Additionally, a realtime graph shows particle locations at every step.
