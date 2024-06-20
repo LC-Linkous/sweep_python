@@ -1,4 +1,4 @@
-# sweep
+# sweep_python
 
 Simple sweep optimizer written in Python. Currently uses a basic grid search.
 

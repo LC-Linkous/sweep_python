@@ -1,8 +1,8 @@
 #! /usr/bin/python3
 
 ##--------------------------------------------------------------------\
-#   sweep
-#   './sweep/src/main_test_graph.py'
+#   sweep_python
+#   './sweep_python/src/main_test_graph.py'
 #   Test function/example for using the 'sweep' class in sweep.py.
 #   Format updates are for integration in the AntennaCAT GUI.
 #   This version builds from 'test_details.py' to include a 

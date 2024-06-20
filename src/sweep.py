@@ -1,8 +1,8 @@
 #! /usr/bin/python3
 
 ##--------------------------------------------------------------------\
-#   sweep
-#   './sweep/src/sweep.py'
+#   sweep_python
+#   './sweep_python/src/sweep.py'
 #   Parameter sweep class. Iterates through a specified parameter space
 #   to find the optimial solution based on target values.
 #

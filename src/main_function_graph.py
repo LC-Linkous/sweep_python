@@ -1,8 +1,8 @@
 #! /usr/bin/python3
 
 ##-------------------------------------------------------------------------------\
-#   sweep
-#   './sweep/src/main_function_graph.py'
+#   sweep_python
+#   './sweep_python/src/main_function_graph.py'
 #   generates graphs for function based on constraints and configurations
 #   in-package demo for graphing the pareto front
 #

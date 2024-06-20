@@ -1,8 +1,8 @@
 #! /usr/bin/python3
 
 ##--------------------------------------------------------------------\
-#   sweep
-#   './sweep/src/configs_F.py'
+#   sweep_python
+#   './sweep_python/src/configs_F.py'
 #   Constant values for objective function. Formatted for
 #       automating objective function integration
 #
