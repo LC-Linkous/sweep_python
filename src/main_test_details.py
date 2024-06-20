@@ -7,7 +7,7 @@
 #   Format updates are for integration in the AntennaCAT GUI.
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: June 14, 2024
+#   Last update: June 19, 2024
 ##--------------------------------------------------------------------\
 
 
@@ -31,24 +31,17 @@ class TestDetails():
         MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
         E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximum allowed iterations
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = ...
+        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search,
+                                            #3 = bayesian_search, 4 = gradient_search 
+
         
         # Objective function dependent variables
         func_F = func_configs.OBJECTIVE_FUNC  # objective function
         constr_F = func_configs.CONSTR_FUNC   # constraint function
 
 
-        # Swarm setting values
-        parent = self                 # Optional parent class for swarm 
-                                        # (Used for passing debug messages or
-                                        # other information that will appear 
-                                        # in GUI panels)
-
-        detailedWarnings = False      # Optional boolean for detailed feedback
-
-
         # Swarm vars
-        self.best_eval = 1            # Starting eval value
+        self.best_eval = 9999         # set higher than normal because of the potential for missing the target
 
         parent = self                 # Optional parent class for swarm 
                                         # (Used for passing debug messages or

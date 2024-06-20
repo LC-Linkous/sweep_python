@@ -25,8 +25,8 @@ class sweep:
     #        int, [[float, float,...]],
     #        float, int, int,
     #        func, func, obj, bool) 
-    # int search_method:  1 = basic_grid,      2 = ....
-    #                     3 = ...
+    # int search_method:  1 = basic_grid, 2 = random_search,
+                        #3 = bayesian_search, 4 = gradient_search 
     def __init__(self, NO_OF_PARTICLES, lbound, ubound, 
                  min_res, max_res, 
                  output_size, targets,
@@ -191,7 +191,7 @@ class sweep:
         return noError
 
             
-    def basic_grid_search(self, particle):
+    def grid_search(self, particle):
         # If particle is out of bounds, bring the particle back in bounds
         # The first condition checks if constraints are met, 
         # and the second determines if the values are to large (positive or negitive)
@@ -219,7 +219,28 @@ class sweep:
             else:
                 break
                 
-        return new_location.tolist()
+        self.M[:,particle] = new_location.tolist()
+
+
+    def random_search(self, particle):
+        # Randomly generate a particle between the upper and lower bounds
+        lbounds = self.lbound.flatten()
+        ubounds = self.ubound.flatten()
+
+        random_numbers = []
+
+        for lower, upper in zip(lbounds, ubounds):
+            rand_num = np.random.uniform(lower, upper)
+            random_numbers.append(rand_num)
+
+        self.M[:,particle] = random_numbers
+
+    def bayesian_search(self, particle):
+        pass
+        
+
+    def gradient_search(self, particle):
+         pass
 
 
     def check_global_local(self, Flist, particle):
@@ -237,12 +258,20 @@ class sweep:
         #    This could look less weird.)
         self.Mlast = 1*self.M
         if self.search_method == 1:
-            # basic grid search
-            newLoc = self.basic_grid_search(particle)
+            # grid search
+            self.grid_search(particle)
+        elif self.search_method == 2:
+            # random search
+            self.random_search(particle)
+        elif self.search_method == 3:
+            # bayesian search
+            self.bayesian_search(particle)
+        elif self.search_method == 4:
+            # gradient search
+            self.gradient_search(particle)
         else:
             self.error_message_generator("ERROR: invalid search method selected!")
 
-        self.M[:,particle] = newLoc
 
 
     def converged(self):

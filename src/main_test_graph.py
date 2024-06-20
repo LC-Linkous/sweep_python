@@ -9,7 +9,7 @@
 #       matplotlib plot of particle location
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: June 3, 2024
+#   Last update: June 19, 2024
 ##--------------------------------------------------------------------\
 
 
@@ -34,16 +34,20 @@ class TestGraph():
 
         MIN_RES = [[0.1, 0.2, 0.3]]      # Minimum resolution for search
         MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
-        E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
+        E_TOL = 10 ** -6                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximum allowed iterations
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = ...
-        
+        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search,
+                                            #3 = bayesian_search, 4 = gradient_search 
+
+
+       
         # Objective function dependent variables
         func_F = func_configs.OBJECTIVE_FUNC  # objective function
         constr_F = func_configs.CONSTR_FUNC   # constraint function
 
 
-        self.best_eval = 1
+        self.best_eval = 9999         # set higher than normal because of the potential for missing the target
+
 
         parent = None           # Optional parent class for swarm 
                                         # (Used for passing debug messages or
@@ -66,7 +70,7 @@ class TestGraph():
 
         # Matplotlib setup
         self.targets = TARGETS
-        self.fig = plt.figure(figsize=(14, 7))
+        self.fig = plt.figure(figsize=(10, 5))#(figsize=(14, 7))
         # position
         self.ax1 = self.fig.add_subplot(121, projection='3d')
         self.ax1.set_title("Particle Location, Iteration: " +str(self.ctr))
@@ -113,13 +117,13 @@ class TestGraph():
         
         # MOVEMENT PLOT
         if np.shape(m_coords)[0] == 2: #2-dim func
-            self.ax1.set_title("Particle/Agent Location, Iteration: " +str(self.ctr))
+            self.ax1.set_title("Particle Location, Iteration: " +str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.scatter = self.ax1.scatter(m_coords[0, :], m_coords[1, :], edgecolors='b')
 
         elif np.shape(m_coords)[0] == 3: #3-dim func
-            self.ax1.set_title("Particle/Agent Location, Iteration: " +str(self.ctr))
+            self.ax1.set_title("Particle Location, Iteration: " +str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.ax1.set_zlabel("$x_3$")
@@ -151,6 +155,8 @@ class TestGraph():
 
 
         plt.pause(0.0001)  # Pause to update the plot
+        if self.ctr == 0:
+            time.sleep(3)
         self.ctr = self.ctr + 1
 
 

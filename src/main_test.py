@@ -27,15 +27,18 @@ if __name__ == "__main__":
     TARGETS = [0, 0]                # Target values for output
     E_TOL = 10 ** -6                # Convergence Tolerance
     MAXIT = 200                     # Maximum allowed iterations
-    SEARCH_METHOD = 1               # int search 1 = basic_grid, 2 = ...
-    best_eval = 1
+    SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search,
+                                        #3 = bayesian_search, 4 = gradient_search 
+
+
+    best_eval = 9999         # set higher than normal because of the potential for missing the target
 
     parent = None            # Optional parent class for swarm 
                                         # (Used for passing debug messages or
                                         # other information that will appear 
                                         # in GUI panels)
 
-    suppress_output = False   # Suppress the console output of particle swarm
+    suppress_output = True   # Suppress the console output of particle swarm
 
     allow_update = True       # Allow objective call to update state 
                                 # (can be set on each iteration)
