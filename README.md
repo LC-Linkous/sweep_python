@@ -21,6 +21,9 @@ Now featuring AntennaCAT hooks for GUI integration and user input handling.
     * [Constraint Handling](#constraint-handling)
     * [Search Types](#search-types)
         * [basic_grid](#basic_grid)
+        * [random_search](#random_search)
+        * [bayesian_search](#bayesian_search)
+        * [gradient_search](#gradient_search)
     * [Multi-Object Optimization](#multi-object-optimization)
     * [Objective Function Handling](#objective-function-handling)
       * [Internal Objective Function Example](internal-objective-function-example)
@@ -201,13 +204,13 @@ main_test_details.py provides an example using a parent class, and the self.supp
 ### Realtime Graph
 
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/grid_sweep.png" alt="Example Grid Sweep Convergence (Attempt)" height="200">
+        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/grid_sweep.gif" alt="Example Grid Sweep Convergence (Attempt)" height="200">
 </p>
 <br>
 <br>
 <br>
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/random_sweep.png" alt="Example Random Sweep Convergence (Attempt)" height="200">
+        <img src="https://github.com/LC-Linkous/sweep_python/blob/main/media/random_sweep.gif" alt="Example Random Sweep Convergence (Attempt)" height="200">
 </p>
 
 main_test_graph.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. Additionally, a realtime graph shows particle locations at every step.
