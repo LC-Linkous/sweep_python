@@ -1,13 +1,21 @@
 # sweep_python
 
-Simple sweep optimizer written in Python. Currently uses a basic grid search.
+# INPROGRESS!
 
-The format is based off of the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000) for data collection baseline. This repo does not feature any PSO optimization. Instead, the format has been used to retain modularity with other optimizers.
+Simple sweep optimizer written in Python. 
+
+The approaches in this repo are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
+
+The class format is based off of the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000) for data collection baseline. This repo does not feature any PSO optimization. Instead, the format has been used to retain modularity with other optimizers.
 
 Now featuring AntennaCAT hooks for GUI integration and user input handling.
 
 ## Table of Contents
 * [Sweep Optimization](#sweep-optimization)
+    * [Grid-based Sweep ](#grid-based-sweep)
+    * [Random Search](#random-search)
+    * [Bayesian Search](#bayesian-search)
+    * [Gradient-based Search ](#gradient-based-search)   
 * [Requirements](#requirements)
 * [Implementation](#implementation)
     * [Constraint Handling](#constraint-handling)
@@ -28,10 +36,21 @@ Now featuring AntennaCAT hooks for GUI integration and user input handling.
 
 ## Sweep Optimization
 
-### Grid-based Sweep Optimizer
+### Grid-based Sweep 
 
 A grid-based sweep optimizer, often referred to as grid search, is a simple yet effective optimization technique commonly used for hyperparameter tuning in machine learning models. This method systematically explores a specified subset of the hyperparameter space by evaluating the performance of a model with all possible combinations of the provided hyperparameter values.
 
+### Random Search
+
+Random search is an optimization method where solutions are randomly sampled from a defined space, evaluated, and iteratively improved based on the evaluations, aiming to find an optimal or near-optimal solution.  Random search is generally not as efficient as more advanced optimization algorithms like gradient-based methods or evolutionary algorithms, especially in problems where the search space is structured or the objective function has a particular shape that can be exploited.
+
+### Bayesian Search
+
+Bayesian search, or Bayesian optimization, uses probabilistic models to efficiently optimize functions that are expensive to evaluate. It iteratively updates a Bayesian model of the objective function based on sampled evaluations, balancing exploration of uncertain regions with exploitation of promising areas. This approach is particularly effective in scenarios like hyperparameter tuning and experimental design where each evaluation is resource-intensive or time-consuming.
+
+### Gradient-based Search 
+
+Gradient-based search involves computing and utilizing the gradient of an objective function to iteratively find its minimum or maximum. By moving in the direction opposite to the gradient, the algorithm efficiently converges towards the optimal solution in smooth, differentiable functions. It is a fundamental technique used extensively in optimization problems, such as training neural networks in machine learning and solving mathematical models in scientific computations.
 
 ## Requirements
 
@@ -101,19 +120,36 @@ The variables from PSO_python have been reused to retain modularity with Antenna
         MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
         E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximum allowed iterations (useful for debug)
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = ...
+        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search,
+                                                #3 = bayesian_search, 4 = gradient_search 
 
 ```
 
 
 #### basic_grid
 
-The basic grid search uses the current position of a particle (or agent), and increments it one step towards the upper bounds based on the
-defined problem space. It can use 1 or more particles (or agents) to search a space. If one particle is used, it will start at the lower bound of the decision space, and increment based on the minimum resolution until the particle reaches the maximum boundary limit.
+The basic grid search uses the current position of a particle (or agent), and increments it one step towards the upper bounds based on the defined problem space. It can use 1 or more particles (or agents) to search a space. If one particle is used, it will start at the lower bound of the decision space, and increment based on the minimum resolution until the particle reaches the maximum boundary limit.
 
 Resolution is a multi-dimensional vector to allow for tuning in all dimensions of the input space. 
 
 This method does not tend to converge with a small error tolerance.
+
+
+#### random_search
+
+The random search generates NO_OF_PARTICLES agents in order to search the defined problem space. Each agent is independent and does not move from its initial generated position. 
+
+
+
+#### bayesian_search
+
+
+#### gradient_search 
+
+
+
+
+
 
 ### Multi-Object Optimization
 The no preference method of multi-objective optimization, but a Pareto Front is not calculated. Instead the best choice (smallest norm of output vectors) is listed as the output.
@@ -165,12 +201,18 @@ main_test_details.py provides an example using a parent class, and the self.supp
 ### Realtime Graph
 
 <p align="center">
-        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/sweep_loc_fitness.png" alt="Example Sweep Convergence (Attempt)" height="200">
+        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/grid_sweep.png" alt="Example Grid Sweep Convergence (Attempt)" height="200">
+</p>
+<br>
+<br>
+<br>
+<p align="center">
+        <img src="https://github.com/LC-Linkous/sweep/blob/main/media/random_sweep.png" alt="Example Random Sweep Convergence (Attempt)" height="200">
 </p>
 
 main_test_graph.py provides an example using a parent class, and the self.suppress_output and detailedWarnings flags to control error messages that are passed back to the parent class to be printed with a timestamp. Additionally, a realtime graph shows particle locations at every step.
 
-The figure above is a snapshot of the search. The left shows all of the search locations of a single particle (NOTE: toggle a the 'clear' boolean to turn this feature off), and the right side shows the target (marked by a star) and the fitness function locations (the open circles). While the fitness of the particle is very close to the target, it does not come closer than the 10E-6 tolerance, so the search does not converge.
+The figures above are a snapshots of the search. The left shows all of the search locations of a single particle (NOTE: toggle a the 'clear' boolean to turn this feature off), and the right side shows the target (marked by a star) and the fitness function locations (the open circles). While the fitness of the particle is very close to the target, it does not come closer than the 10E-6 tolerance, so the search does not converge.
 
 NOTE: if you close the graph as the code is running, the code will continue to run, but the graph will not re-open.
 
