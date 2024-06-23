@@ -6,8 +6,8 @@
 #   Parameter sweep class. Iterates through a specified parameter space
 #   to find the optimial solution based on target values.
 #
-#   Author(s): Lauren Linkous
-#   Last update: May 30, 2024
+#   Author(s): Lauren Linkous, Jonathan Lundquist
+#   Last update: June 22, 2024
 ##--------------------------------------------------------------------\
 
 
@@ -25,8 +25,8 @@ class sweep:
     #        int, [[float, float,...]],
     #        float, int, int,
     #        func, func, obj, bool) 
-    # int search_method:  1 = basic_grid, 2 = random_search,
-                        #3 = bayesian_search, 4 = gradient_search 
+    # int search_method:  1 = basic_grid, 2 = random_search
+    
     def __init__(self, NO_OF_PARTICLES, lbound, ubound, 
                  min_res, max_res, 
                  output_size, targets,
@@ -230,17 +230,10 @@ class sweep:
         random_numbers = []
 
         for lower, upper in zip(lbounds, ubounds):
-            rand_num = np.random.uniform(lower, upper)
+            rand_num = self.rng.uniform(lower, upper)
             random_numbers.append(rand_num)
 
         self.M[:,particle] = random_numbers
-
-    def bayesian_search(self, particle):
-        pass
-        
-
-    def gradient_search(self, particle):
-         pass
 
 
     def check_global_local(self, Flist, particle):
@@ -263,12 +256,6 @@ class sweep:
         elif self.search_method == 2:
             # random search
             self.random_search(particle)
-        elif self.search_method == 3:
-            # bayesian search
-            self.bayesian_search(particle)
-        elif self.search_method == 4:
-            # gradient search
-            self.gradient_search(particle)
         else:
             self.error_message_generator("ERROR: invalid search method selected!")
 
@@ -284,7 +271,6 @@ class sweep:
         max_iter = self.iter > self.maxit
         return max_iter
 
-
     def active_agents(self):
         # check if the search area has been covered.
         active = 0
@@ -295,7 +281,6 @@ class sweep:
             return True
         return False
 
-    
     def complete(self):
         done = self.converged() or self.maxed() or (not self.active_agents())
         return done
@@ -333,7 +318,6 @@ class sweep:
                     "Flist: \n" + str(self.F_Gb) + "\n" + \
                     "Norm Flist: \n" + str(np.linalg.norm(self.F_Gb)) + "\n"
                 self.error_message_generator(msg)
-
 
     def get_obj_inputs(self):
         return np.vstack(self.M)

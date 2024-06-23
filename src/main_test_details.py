@@ -31,8 +31,8 @@ class TestDetails():
         MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
         E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximum allowed iterations
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search,
-                                            #3 = bayesian_search, 4 = gradient_search 
+        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search
+        
 
         
         # Objective function dependent variables

@@ -36,8 +36,8 @@ class TestGraph():
         MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
         E_TOL = 10 ** -6                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximum allowed iterations
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search,
-                                            #3 = bayesian_search, 4 = gradient_search 
+        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search
+        
 
 
        
@@ -69,22 +69,25 @@ class TestGraph():
 
 
         # Matplotlib setup
+
+        ## Standard search area and distance of solution to target plot
         self.targets = TARGETS
         self.fig = plt.figure(figsize=(10, 5))#(figsize=(14, 7))
-        # position
+        ### position
         self.ax1 = self.fig.add_subplot(121, projection='3d')
         self.ax1.set_title("Particle Location, Iteration: " +str(self.ctr))
         self.ax1.set_xlabel('X')
         self.ax1.set_ylabel('Y')
         self.ax1.set_zlabel('Z')
         self.scatter1 = None
-        # fitness
+        ### fitness
         self.ax2 = self.fig.add_subplot(122, projection='3d')
         self.ax2.set_title("Fitness Relation to Target")
         self.ax2.set_xlabel('X')
         self.ax2.set_ylabel('Y')
         self.ax2.set_zlabel('Z')
         self.scatter2 = None
+
 
     def debug_message_printout(self, txt):
         if txt is None:
@@ -170,6 +173,7 @@ class TestGraph():
 
             # step through optimizer processing
             self.mySweep.step(self.suppress_output)
+
 
             # call the objective function, control 
             # when it is allowed to update and return 

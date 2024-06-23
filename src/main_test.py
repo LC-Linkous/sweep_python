@@ -26,9 +26,9 @@ if __name__ == "__main__":
     OUT_VARS = 2                    # Number of output variables (y-values)
     TARGETS = [0, 0]                # Target values for output
     E_TOL = 10 ** -6                # Convergence Tolerance
-    MAXIT = 200                     # Maximum allowed iterations
-    SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search,
-                                        #3 = bayesian_search, 4 = gradient_search 
+    MAXIT = 10000                   # Maximum allowed iterations
+    SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
+
 
 
     best_eval = 9999         # set higher than normal because of the potential for missing the target
