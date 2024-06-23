@@ -6,7 +6,7 @@ Simple sweep optimizer written in Python.
 
 The approaches in this repo are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
 
-The class format is based off of the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000) for data collection baseline. This repo does not feature any PSO optimization. Instead, the format has been used to retain modularity with other optimizers.
+The class format is based off of the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000) for data collection baseline. This repo does not feature any PSO optimization. Instead, the format has been used to retain modularity with other optimizers. Several methods using surrogate models have been moved into their own repositories (Bayesian, Gradient Based Search); see the [directory](#https://github.com/LC-Linkous/Directory) for the most up to date list of optimizers.
 
 Now featuring AntennaCAT hooks for GUI integration and user input handling.
 
@@ -14,16 +14,12 @@ Now featuring AntennaCAT hooks for GUI integration and user input handling.
 * [Sweep Optimization](#sweep-optimization)
     * [Grid-based Sweep ](#grid-based-sweep)
     * [Random Search](#random-search)
-    * [Bayesian Search](#bayesian-search)
-    * [Gradient-based Search ](#gradient-based-search)   
 * [Requirements](#requirements)
 * [Implementation](#implementation)
     * [Constraint Handling](#constraint-handling)
     * [Search Types](#search-types)
         * [basic_grid](#basic_grid)
         * [random_search](#random_search)
-        * [bayesian_search](#bayesian_search)
-        * [gradient_search](#gradient_search)
     * [Multi-Object Optimization](#multi-object-optimization)
     * [Objective Function Handling](#objective-function-handling)
       * [Internal Objective Function Example](internal-objective-function-example)
@@ -46,14 +42,6 @@ A grid-based sweep optimizer, often referred to as grid search, is a simple yet 
 ### Random Search
 
 Random search is an optimization method where solutions are randomly sampled from a defined space, evaluated, and iteratively improved based on the evaluations, aiming to find an optimal or near-optimal solution.  Random search is generally not as efficient as more advanced optimization algorithms like gradient-based methods or evolutionary algorithms, especially in problems where the search space is structured or the objective function has a particular shape that can be exploited.
-
-### Bayesian Search
-
-Bayesian search, or Bayesian optimization, uses probabilistic models to efficiently optimize functions that are expensive to evaluate. It iteratively updates a Bayesian model of the objective function based on sampled evaluations, balancing exploration of uncertain regions with exploitation of promising areas. This approach is particularly effective in scenarios like hyperparameter tuning and experimental design where each evaluation is resource-intensive or time-consuming.
-
-### Gradient-based Search 
-
-Gradient-based search involves computing and utilizing the gradient of an objective function to iteratively find its minimum or maximum. By moving in the direction opposite to the gradient, the algorithm efficiently converges towards the optimal solution in smooth, differentiable functions. It is a fundamental technique used extensively in optimization problems, such as training neural networks in machine learning and solving mathematical models in scientific computations.
 
 ## Requirements
 
@@ -122,9 +110,9 @@ The variables from PSO_python have been reused to retain modularity with Antenna
         MIN_RES = [[0.1, 0.2, 0.3]]      # Minimum resolution for search
         MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
         E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
-        MAXIT = 5000                     # Maximum allowed iterations (useful for debug)
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search,
-                                                #3 = bayesian_search, 4 = gradient_search 
+        MAXIT = 5000                     # Maximumuseful for debug)
+        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search
+                                               
 
 ```
 
@@ -141,16 +129,6 @@ This method does not tend to converge with a small error tolerance.
 #### random_search
 
 The random search generates NO_OF_PARTICLES agents in order to search the defined problem space. Each agent is independent and does not move from its initial generated position. 
-
-
-
-#### bayesian_search
-
-
-#### gradient_search 
-
-
-
 
 
 
