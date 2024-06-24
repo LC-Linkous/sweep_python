@@ -1,7 +1,5 @@
 # sweep_python
 
-# INPROGRESS!
-
 Simple sweep optimizer written in Python. 
 
 The approaches in this repo are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
