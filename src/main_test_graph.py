@@ -9,7 +9,7 @@
 #       matplotlib plot of particle location
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: June 19, 2024
+#   Last update: June 26, 2024
 ##--------------------------------------------------------------------\
 
 
@@ -26,20 +26,18 @@ class TestGraph():
         self.ctr = 0
 
         # Constant variables
-        NO_OF_PARTICLES = 1              # Number of indpendent agents searching the space
+        NO_OF_PARTICLES = 2              # Number of indpendent agents searching the space
         LB = func_configs.LB             # Lower boundaries
         UB = func_configs.UB             # Upper boundaries
         OUT_VARS = func_configs.OUT_VARS # Number of output variables (y-values)
         TARGETS = func_configs.TARGETS   # Target values for output
 
-        MIN_RES = [[0.1, 0.2, 0.3]]      # Minimum resolution for search
-        MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
+        MIN_RES = [[0.05, 0.05, 0.07]]   # Minimum resolution for search
+        MAX_RES = [[0.1, 0.2, 0.3]]      # Maximum resolution for search
         E_TOL = 10 ** -6                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximum allowed iterations
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search
+        SEARCH_METHOD = 2                # int search 1 = basic_grid, 2 = random_search
         
-
-
        
         # Objective function dependent variables
         func_F = func_configs.OBJECTIVE_FUNC  # objective function
@@ -105,6 +103,11 @@ class TestGraph():
          
 
     def update_plot(self, m_coords, f_coords, targets, showTarget, clearAx=True, setLimts=False):
+        print("UPDATE PLOT")
+        print(np.shape(f_coords))
+        print(f_coords)
+
+
         # if self.scatter is None:
         if clearAx == True:
             self.ax1.clear() #use this to git rid of the 'ant tunnel' trails
@@ -119,33 +122,33 @@ class TestGraph():
             self.ax2.set_zlim(-5, 5)
         
         # MOVEMENT PLOT
-        if np.shape(m_coords)[0] == 2: #2-dim func
+        if np.shape(m_coords)[1] == 2: #2-dim func
             self.ax1.set_title("Particle Location, Iteration: " +str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
-            self.scatter = self.ax1.scatter(m_coords[0, :], m_coords[1, :], edgecolors='b')
+            self.scatter = self.ax1.scatter(m_coords[:,0], m_coords[:,1], edgecolors='b')
 
-        elif np.shape(m_coords)[0] == 3: #3-dim func
+        elif np.shape(m_coords)[1] == 3: #3-dim func
             self.ax1.set_title("Particle Location, Iteration: " +str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.ax1.set_zlabel("$x_3$")
-            self.scatter = self.ax1.scatter(m_coords[0, :], m_coords[1, :], m_coords[2, :], edgecolors='b')
+            self.scatter = self.ax1.scatter(m_coords[:,0], m_coords[:,1], m_coords[:,2], edgecolors='b')
 
 
         # FITNESS PLOT
-        if np.shape(f_coords)[0] == 2: #2-dim obj func
+        if np.shape(f_coords)[1] == 2: #2-dim obj func
             self.ax2.set_title("Global Best Fitness Relation to Target")
             self.ax2.set_xlabel("$F_{1}(x,y)$")
             self.ax2.set_ylabel("$F_{2}(x,y)$")
-            self.scatter = self.ax2.scatter(f_coords[0, :], f_coords[1, :], marker='o', s=40, facecolor="none", edgecolors="k")
+            self.scatter = self.ax2.scatter(f_coords[:,0], f_coords[:,1], marker='o', s=40, facecolor="none", edgecolors="k")
 
-        elif np.shape(f_coords)[0] == 3: #3-dim obj fun
+        elif np.shape(f_coords)[1] == 3: #3-dim obj fun
             self.ax2.set_title("Global Best Fitness Relation to Target")
             self.ax2.set_xlabel("$F_{1}(x,y)$")
             self.ax2.set_ylabel("$F_{2}(x,y)$")
             self.ax2.set_zlabel("$F_{3}(x,y)$")
-            self.scatter = self.ax2.scatter(f_coords[0, :], f_coords[1, :], f_coords[2, :], marker='o', s=40, facecolor="none", edgecolors="k")
+            self.scatter = self.ax2.scatter(f_coords[:,0], f_coords[:,1], f_coords[:,2], marker='o', s=40, facecolor="none", edgecolors="k")
 
 
         if showTarget == True: # plot the target point
@@ -167,7 +170,6 @@ class TestGraph():
 
     def run(self):
         
-
         # instantiation of particle swarm optimizer 
         while not self.mySweep.complete():
 

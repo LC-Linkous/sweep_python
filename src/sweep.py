@@ -7,7 +7,7 @@
 #   to find the optimial solution based on target values.
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: June 22, 2024
+#   Last update: June 26, 2024
 ##--------------------------------------------------------------------\
 
 
@@ -64,13 +64,12 @@ class sweep:
                                                         arrays  with the same length")
            
         else:
-
             
             if heightl == 1:
-                lbound = np.vstack(lbound)
+                lbound = lbound
         
             if heightu == 1:
-                ubound = np.vstack(ubound)
+                ubound = ubound
 
             self.lbound = lbound
             self.ubound = ubound
@@ -79,18 +78,13 @@ class sweep:
 
             # use NO_OF_PARTICLES to set if this a multi agent search or not
             # first 'particle'
-            self.M = np.vstack(lbound)  # at least 1 particle strats at the lower bounds
+            self.M = np.array([lbound])  # at least 1 particle strats at the lower bounds
 
-            # any other agents (if they exist)
+
+            # any other agents (if they exist they're assigned random starting locs)
             for i in range(2,int(NO_OF_PARTICLES)+1):
-                            
-                            self.M = \
-                                np.hstack([self.M, 
-                                        np.vstack(np.multiply( self.rng.random((np.max([heightl, 
-                                                                                        widthl]),
-                                                                                        1)), 
-                                                                                        variation) 
-                                                                                        + lbound)])
+                new_M = np.multiply((self.rng.random((1,np.max([heightl, widthl])))), variation)+ lbound
+                self.M = np.vstack([self.M, new_M])
 
             '''
             self.M                      : An array of current search location(s).
@@ -116,10 +110,10 @@ class sweep:
             self.Mlast                  : Last search location
             '''
             self.output_size = output_size
-            self.Active = np.ones((NO_OF_PARTICLES))  # not/active if particles finish before others                      
-            self.Gb = sys.maxsize*np.ones((np.max([heightl, widthl]),1))   
-            self.F_Gb = sys.maxsize*np.ones((output_size,1))                
-            self.targets = np.vstack(np.array(targets))
+            self.Active = np.ones((NO_OF_PARTICLES))  # not/active if particles finish before others
+            self.Gb = sys.maxsize*np.ones((1,np.max([heightl, widthl])))   
+            self.F_Gb = sys.maxsize*np.ones((1,output_size))              
+            self.targets = np.array(targets)
             self.min_search_res = np.array(min_res)
             self.max_search_res = np.array(max_res)
             self.search_resolution = np.array(min_res)
@@ -147,13 +141,14 @@ class sweep:
             self.parent.debug_message_printout(msg)
             
     def call_objective(self, allow_update):
+
         if self.Active[self.current_particle]:
             # call the objective function. If there's an issue with the function execution, 'noError' returns False
-            newFVals, noError = self.obj_func(np.vstack(self.M[:,self.current_particle]), self.output_size)
+            newFVals, noError = self.obj_func(np.hstack(self.M[self.current_particle]), self.output_size)
             if noError == True:
-                self.Fvals = newFVals
+                self.Fvals = [newFVals]
                 if allow_update:
-                    self.Flist = abs(self.targets - self.Fvals)
+                    self.Flist = np.hstack(abs(self.targets - self.Fvals))
                     self.iter = self.iter + 1
                     self.allow_update = 1
                 else:
@@ -165,8 +160,8 @@ class sweep:
         # make sure that the next move is not outside of the lbounds and ubounds.
         valid_move = True
         for i in range(0,np.shape(self.M)[0]):
-            if (self.lbound[i] > self.M[i,particle]) \
-               or (self.ubound[i] < self.M[i,particle]):
+            if (self.lbound[i] > self.M[particle,i]) \
+               or (self.ubound[i] < self.M[particle,i]):
                     valid_move = False
     
         return valid_move
@@ -174,8 +169,8 @@ class sweep:
     def check_bounds(self, particle):
         update = 0
         for i in range(0,(np.shape(self.M)[0])):
-            if (self.lbound[i] > self.M[i,particle]) \
-               or (self.ubound[i] < self.M[i,particle]):
+            if (self.lbound[i] > self.M[particle,i]) \
+               or (self.ubound[i] < self.M[particle,i]):
                 update = i+1        
         return update
     
@@ -197,7 +192,7 @@ class sweep:
         # and the second determines if the values are to large (positive or negitive)
         # and may cause a buffer overflow with large exponents (a bug that was found experimentally)
         # Convert to numpy arrays for easier manipulation
-        current_location = np.array(self.M[:,particle])
+        current_location = np.array(self.M[particle])
         lbounds = self.lbound.flatten()
         ubounds = self.ubound.flatten()
         resolution = self.min_search_res[0]
@@ -208,7 +203,6 @@ class sweep:
         # Start from the last dimension
         for i in range(N-1, -1, -1):
             new_location[i] += resolution[i]
-            
             # Check if the new location exceeds the upper bound
             if new_location[i] > ubounds[i]:
                     new_location[i] = lbounds[i]
@@ -219,7 +213,7 @@ class sweep:
             else:
                 break
                 
-        self.M[:,particle] = new_location.tolist()
+        self.M[particle] = 1*new_location.tolist()
 
 
     def random_search(self, particle):
@@ -233,22 +227,20 @@ class sweep:
             rand_num = self.rng.uniform(lower, upper)
             random_numbers.append(rand_num)
 
-        self.M[:,particle] = random_numbers
+        self.M[particle] = random_numbers
 
 
     def check_global_local(self, Flist, particle):
         # use L2 norm to check if fitness val is less than global best fitness
         # if yes, update with the new best point
         if np.linalg.norm(Flist) < np.linalg.norm(self.F_Gb):
-            self.F_Gb = Flist
-            self.Gb = np.vstack(np.array(self.M[:,particle]))
+            self.F_Gb = np.array([Flist])
+            self.Gb = np.array(self.M[particle])
         
        
 
     def update_point(self, particle):
         # update the location.
-        # (NOTE: Format retained for consistency across optimizers.
-        #    This could look less weird.)
         self.Mlast = 1*self.M
         if self.search_method == 1:
             # grid search
@@ -291,7 +283,7 @@ class sweep:
                 "STEP #" + str(self.iter) +"\n" + \
                 "-----------------------------\n" + \
                 "Current Location:\n" + \
-                str(np.hstack(self.M)) +"\n" + \
+                str(self.M[self.current_particle]) +"\n" + \
                 "Best Fitness Solution: \n" +\
                 str(np.linalg.norm(self.F_Gb)) +"\n" +\
                 "Best Particle Position: \n" +\
@@ -300,8 +292,7 @@ class sweep:
                 str(self.search_resolution) +"\n" + \
                 "-----------------------------"
             self.error_message_generator(msg)
-            
-
+           
         if self.allow_update:
             if self.Active[self.current_particle]:
                 # check if points are better than last global bests

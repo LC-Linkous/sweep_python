@@ -18,7 +18,7 @@ from constr_F import constr_F
 
 
 if __name__ == "__main__":
-    NO_OF_PARTICLES = 1             # Number of indpendent agents searching the space
+    NO_OF_PARTICLES = 4             # Number of indpendent agents searching the space
     LB = [[0.21, 0, 0.1]]           # Lower boundaries
     UB = [[1, 1, 0.5]]              # Upper boundaries
     MIN_RES = [[0.01, 0.02, 0.01]]  # Minimum resolution for search
