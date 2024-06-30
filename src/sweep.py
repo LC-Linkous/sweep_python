@@ -236,8 +236,6 @@ class sweep:
         if np.linalg.norm(Flist) < np.linalg.norm(self.F_Gb):
             self.F_Gb = np.array([Flist])
             self.Gb = np.array(self.M[particle])
-        
-       
 
     def update_point(self, particle):
         # update the location.

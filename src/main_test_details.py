@@ -14,32 +14,36 @@
 import numpy as np
 import time
 from sweep import sweep
-import configs_F as func_configs
 
+# OBJECTIVE FUNCTION SELECTION
+import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
+#import himmelblau.configs_F as func_configs         # single objective, 2D input
+#import lundquist_3_var.configs_F as func_configs     # multi objective function
 
 
 class TestDetails():
     def __init__(self):
         # Constant variables
-        NO_OF_PARTICLES = 1              # Number of indpendent agents searching the space
-        LB = func_configs.LB             # Lower boundaries
-        UB = func_configs.UB             # Upper boundaries
-        OUT_VARS = func_configs.OUT_VARS # Number of output variables (y-values)
-        TARGETS = func_configs.TARGETS   # Target values for output
+        NO_OF_PARTICLES = 4             # Number of indpendent agents searching the space
+        MIN_RES = [[0.01, 0.02, 0.01]]  # Minimum resolution for search
+        MAX_RES = [[0.01, 0.02, 0.01]]  # Maximum resolution for search
+        E_TOL = 10 ** -6                # Convergence Tolerance
+        MAXIT = 10000                   # Maximum allowed iterations
+        SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
 
-        MIN_RES = [[0.1, 0.2, 0.3]]      # Minimum resolution for search
-        MAX_RES = [[0.01, 0.02, 0.01]]   # Maximum resolution for search
-        E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
-        MAXIT = 5000                     # Maximum allowed iterations
-        SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search
-        
+        # Objective function dependent variables
+        LB = func_configs.LB                    # Lower boundaries, [[0.21, 0, 0.1]]
+        UB = func_configs.UB                    # Upper boundaries, [[1, 1, 0.5]]
+        IN_VARS = func_configs.IN_VARS          # Number of input variables (x-values)   
+        OUT_VARS = func_configs.OUT_VARS        # Number of output variables (y-values)
+        TARGETS = func_configs.TARGETS          # Target values for output
 
-        
         # Objective function dependent variables
         func_F = func_configs.OBJECTIVE_FUNC  # objective function
         constr_F = func_configs.CONSTR_FUNC   # constraint function
 
 
+        
         # Swarm vars
         self.best_eval = 9999         # set higher than normal because of the potential for missing the target
 
