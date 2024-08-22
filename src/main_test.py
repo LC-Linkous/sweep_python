@@ -22,12 +22,11 @@ import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
 
 
 if __name__ == "__main__":
-    NO_OF_PARTICLES = 4             # Number of indpendent agents searching the space
-    MIN_RES = [[0.01, 0.02, 0.01]]  # Minimum resolution for search
-    MAX_RES = [[0.01, 0.02, 0.01]]  # Maximum resolution for search
+    NO_OF_PARTICLES = 3             # Number of indpendent agents searching the space
+    STEP_RES = [[0.4]]#, 0.02, 0.01]] # resolution for search
     E_TOL = 10 ** -6                # Convergence Tolerance
     MAXIT = 10000                   # Maximum allowed iterations
-    SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
+    SEARCH_METHOD = 1               # int search 1 = basic_grid, 2 = random_search
 
     # Objective function dependent variables
     LB = func_configs.LB                    # Lower boundaries, [[0.21, 0, 0.1]]
@@ -55,7 +54,7 @@ if __name__ == "__main__":
     allow_update = True       # Allow objective call to update state 
                                 # (can be set on each iteration)
 
-    mySweep = sweep(NO_OF_PARTICLES, LB, UB, MIN_RES, MAX_RES, 
+    mySweep = sweep(NO_OF_PARTICLES, LB, UB, STEP_RES, 
                     OUT_VARS, TARGETS, E_TOL, MAXIT,
                     SEARCH_METHOD, func_F, constr_F)  
 
@@ -69,11 +68,6 @@ if __name__ == "__main__":
         # call the objective function, control 
         # when it is allowed to update and return 
         # control to optimizer
-
-        # for some objective functions, the function
-        # might not evaluate correctly (e.g., under/overflow)
-        # so when that happens, the function is not evaluated
-        # and the 'step' fucntion will re-gen values and try again
 
         mySweep.call_objective(allow_update)
         iter, eval = mySweep.get_convergence_data()

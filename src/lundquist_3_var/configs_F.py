@@ -26,7 +26,7 @@ CONSTR_FUNC_NAME = "lundquist_3_var.constr_F"
 
 # problem dependent variables
 LB = [[0.21, 0, 0.1]]       # Lower boundaries for input
-UB = [[1, 1, 0.5]]          # Upper boundaries for input
+UB = [[1., 1., 0.5]]          # Upper boundaries for input
 IN_VARS = 3                 # Number of input variables (x-values)
 OUT_VARS = 2                # Number of output variables (y-values)
 TARGETS = [0, 0]            # Target values for output

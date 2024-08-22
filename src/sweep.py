@@ -21,14 +21,14 @@ np.seterr(all='raise')
 class sweep:
     # arguments should take form: 
     # sweep(int, [[float, float,...]], [[float, float,...]], 
-    #       [[float, float,...]], [[float, float,...]],
+    #       [[float, float,...]], 
     #        int, [[float, float,...]],
     #        float, int, int,
     #        func, func, obj, bool) 
     # int search_method:  1 = basic_grid, 2 = random_search
     
     def __init__(self, NO_OF_PARTICLES, lbound, ubound, 
-                 min_res, max_res, 
+                 step_res,
                  output_size, targets,
                  E_TOL, maxit, search_method, 
                  obj_func, constr_func, parent=None, detailedWarnings=False):  
@@ -65,72 +65,77 @@ class sweep:
            
         else:
             
+            
             if heightl == 1:
                 lbound = lbound
         
             if heightu == 1:
                 ubound = ubound
 
-            self.lbound = lbound
-            self.ubound = ubound
+            self.lbound = lbound.astype(np.float64) 
+            self.ubound = ubound.astype(np.float64) 
             variation = ubound-lbound
 
 
-            # use NO_OF_PARTICLES to set if this a multi agent search or not
-            # first 'particle'
-            self.M = np.array([lbound])  # at least 1 particle strats at the lower bounds
+            # CHECK RESOLUTION ARR VS LOC ARR
+            self.search_resolution = np.array(step_res)[0] #default
+            if len(self.search_resolution) != len(self.lbound):
+                print("ERROR in initialization. resolution array must be the same length as the problem bounds")
+                print("RESOLUTION: " + str(self.search_resolution))
+                print("PROBLEM BOUNDS LENGTH: " + str(len(self.ubound)))
+            else:
+                # use NO_OF_PARTICLES to set if this a multi agent search or not
+                # first 'particle'
+                self.M = np.array([self.lbound])  # at least 1 particle strats at the lower bounds
 
 
-            # any other agents (if they exist they're assigned random starting locs)
-            for i in range(2,int(NO_OF_PARTICLES)+1):
-                new_M = np.multiply((self.rng.random((1,np.max([heightl, widthl])))), variation)+ lbound
-                self.M = np.vstack([self.M, new_M])
+                # any other agents (if they exist they're assigned random starting locs)
+                for i in range(2,int(NO_OF_PARTICLES)+1):
+                    new_M = np.multiply((self.rng.random((1,np.max([heightl, widthl])))), variation)+ lbound
+                    self.M = np.vstack([self.M, new_M])
 
-            '''
-            self.M                      : An array of current search location(s).
-            self.output_size            : An integer value for the output size of obj func
-            self.Active                 : An array indicating the activity status of each particle.
-            self.Gb                     : Global best position, initialized with a large value.
-            self.F_Gb                   : Fitness value corresponding to the global best position.
-            self.targets                : Target values for the optimization process.
-            self.min_search_res         : Minimum search resolution value array.
-            self.max_search_res         : Maximum search resolution value array.
-            self.search_resolution      : Current search resolutions.      
-            self.maxit                  : Maximum number of iterations.
-            self.E_TOL                  : Error tolerance.
-            self.obj_func               : Objective function to be optimized.      
-            self.constr_func            : Constraint function.  
-            self.iter                   : Current iteration count.
-            self.current_particle       : Index of the current particle being evaluated.
-            self.number_of_particles    : Total number of particles. 
-            self.allow_update           : Flag indicating whether to allow updates.
-            self.search_method          : search method for the optimization problem.
-            self.Flist                  : List to store fitness values.
-            self.Fvals                  : List to store fitness values.
-            self.Mlast                  : Last search location
-            '''
-            self.output_size = output_size
-            self.Active = np.ones((NO_OF_PARTICLES))  # not/active if particles finish before others
-            self.Gb = sys.maxsize*np.ones((1,np.max([heightl, widthl])))   
-            self.F_Gb = sys.maxsize*np.ones((1,output_size))              
-            self.targets = np.array(targets)
-            self.min_search_res = np.array(min_res)
-            self.max_search_res = np.array(max_res)
-            self.search_resolution = np.array(min_res)
-            self.maxit = maxit                       
-            self.E_TOL = E_TOL                                              
-            self.obj_func = obj_func                                             
-            self.constr_func = constr_func                                   
-            self.iter = 0    
-            self.current_particle = 0     
-            self.number_of_particles = NO_OF_PARTICLES                      
-            self.allow_update = 0                                           
-            self.search_method = search_method                                       
-            self.Flist = []                                                 
-            self.Fvals = []                                                 
-            self.Mlast = 1*self.ubound
+                '''
+                self.M                      : An array of current search location(s).
+                self.output_size            : An integer value for the output size of obj func
+                self.Active                 : An array indicating the activity status of each particle.
+                self.Gb                     : Global best position, initialized with a large value.
+                self.F_Gb                   : Fitness value corresponding to the global best position.
+                self.targets                : Target values for the optimization process.
+                self.search_resolution      : Step search resolutions.      
+                self.current_step           : Current step increment.
+                self.maxit                  : Maximum number of iterations.
+                self.E_TOL                  : Error tolerance.
+                self.obj_func               : Objective function to be optimized.      
+                self.constr_func            : Constraint function.  
+                self.iter                   : Current iteration count.
+                self.current_particle       : Index of the current particle being evaluated.
+                self.number_of_particles    : Total number of particles. 
+                self.allow_update           : Flag indicating whether to allow updates.
+                self.search_method          : search method for the optimization problem.
+                self.Flist                  : List to store fitness values.
+                self.Fvals                  : List to store fitness values.
+                self.Mlast                  : Last search location
+                '''
+                self.output_size = output_size
+                self.Active = np.ones((NO_OF_PARTICLES))  # not/active if particles finish before others
+                self.Gb = sys.maxsize*np.ones((1,np.max([heightl, widthl])))   
+                self.F_Gb = sys.maxsize*np.ones((1,output_size))              
+                self.targets = np.array(targets)
+                self.maxit = maxit                       
+                self.E_TOL = E_TOL                                              
+                self.obj_func = obj_func                                             
+                self.constr_func = constr_func                                   
+                self.iter = 0    
+                self.current_particle = 0     
+                self.number_of_particles = NO_OF_PARTICLES                      
+                self.allow_update = 0                                           
+                self.search_method = search_method                                       
+                self.Flist = []                                                 
+                self.Fvals = []                                                 
+                self.Mlast = 1*self.ubound
+                self.no_of_particles = NO_OF_PARTICLES
 
-            self.error_message_generator("sweep successfully initialized")
+                self.error_message_generator("sweep successfully initialized")
             
 
     def error_message_generator(self, msg):
@@ -174,46 +179,48 @@ class sweep:
                 update = i+1        
         return update
     
-    def validate_obj_function(self, particle):
-        # checks the the objective function resolves with the current particle.
-        # It is possible (and likely) that obj funcs without proper error handling
-        # will throw over/underflow errors.
-        # e.g.: numpy does not support float128()
-        newFVals, noError = self.obj_func(particle, self.output_size)
-        if noError == False:
-            #print("!!!!")
-            pass
-        return noError
-
-            
+           
     def grid_search(self, particle):
         # If particle is out of bounds, bring the particle back in bounds
         # The first condition checks if constraints are met, 
         # and the second determines if the values are to large (positive or negitive)
         # and may cause a buffer overflow with large exponents (a bug that was found experimentally)
+        
         # Convert to numpy arrays for easier manipulation
-        current_location = np.array(self.M[particle])
         lbounds = self.lbound.flatten()
         ubounds = self.ubound.flatten()
-        resolution = self.min_search_res[0]
+        resolution = self.search_resolution
 
-        N = len(current_location)
-        new_location = current_location.copy()
-    
-        # Start from the last dimension
-        for i in range(N-1, -1, -1):
-            new_location[i] += resolution[i]
-            # Check if the new location exceeds the upper bound
-            if new_location[i] > ubounds[i]:
-                    new_location[i] = lbounds[i]
-                    if i == 0:
-                        # the particle has hit the last iteration and is done
-                        self.Active[self.current_particle] = 0
-                        self.error_message_generator("particle # " + str(self.current_particle) + " has hit the upper bound and become inactive")
+        #check current location to determine which dimension is getting incremented next
+        N = len(np.array(self.M[particle]))
+        temp_current_loc = 1.0*np.array(self.M[particle]) #
+        for i in range(N, 0, -1):
+            next_pos = temp_current_loc[i-1] + resolution[i-1]
+            if next_pos < lbounds[i-1]: # lower than the lower bounds. 
+                # if this is out of bounds, the next iter in the for loop will catch it
+                # set current dim to the upper bounds to do a wrap around.
+                temp_current_loc[i-1] = ubounds[i-1]
+                if (i-1) > 0:
+                    pass
+                    # the next iteration of the for loop will increment the next dimension
+                else:
+                    # done. hit the lower bounds
+                    self.Active[particle] = 0
+            elif next_pos > ubounds[i-1]:
+                # if this is out of bounds, the next iter in the for loop will catch it
+                # set current dim to the lower bounds to do a wrap around.
+                temp_current_loc[i-1] = lbounds[i-1]
+                if (i-1) > 0:
+                    pass
+                    # if this is out of bounds, the next iter in the for loop will catch it
+                else:
+                    # done
+                    self.Active[particle] = 0
             else:
-                break
-                
-        self.M[particle] = 1*new_location.tolist()
+                temp_current_loc[i-1] = next_pos
+                break # incremented in 1 dimension at a time
+        # set current location
+        self.M[particle] = 1.0*temp_current_loc
 
 
     def random_search(self, particle):
@@ -270,6 +277,13 @@ class sweep:
         if active > 0:
             return True
         return False
+    
+    def count_active_agents(self):
+        active = 0
+        for i in self.Active:
+            if (i == 1):
+                active = active + 1        
+        return active    
 
     def complete(self):
         done = self.converged() or self.maxed() or (not self.active_agents())
@@ -288,6 +302,8 @@ class sweep:
                 str(np.hstack(self.Gb)) + "\n" +\
                 "Current Search Resolution\n" + \
                 str(self.search_resolution) +"\n" + \
+                "Number of Active Particles\n" + \
+                str(self.count_active_agents()) +"\n" + \
                 "-----------------------------"
             self.error_message_generator(msg)
            

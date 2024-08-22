@@ -24,26 +24,21 @@ import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
 #import lundquist_3_var.configs_F as func_configs     # multi objective function
 
 
-
-
-
 class TestGraph():
     def __init__(self):
         self.ctr = 0
 
-        NO_OF_PARTICLES = 4             # Number of indpendent agents searching the space
-        E_TOL = 10 ** -2                # Convergence Tolerance
+        NO_OF_PARTICLES = 10             # Number of indpendent agents searching the space
+        E_TOL = 10 ** -15                # Convergence Tolerance
         MAXIT = 10000                   # Maximum allowed iterations
         SEARCH_METHOD = 1               # int search 1 = basic_grid, 2 = random_search
 
         #NOTE: resolution should match the LB and UB formats. If it is
         # a higher dimensionality, ALL combinations of that non-applicable
         # dimensionality will be searched
-        # MIN_RES = [[0.01, 0.02, 0.01]]  # Minimum resolution for search
-        # MAX_RES = [[0.01, 0.02, 0.01]]  # Maximum resolution for search
-        MIN_RES = [[0.03]]  # Minimum resolution for search
-        MAX_RES = [[0.03]]  # Maximum resolution for search
-
+        #STEP_RES = [[0.1, 0.2, 0.1]]  # resolution for search
+        STEP_RES = [[0.03]]  # resolution for search
+        #STEP_RES = [[0.5, 0.5]]
 
         # Objective function dependent variables
         LB = func_configs.LB                    # Lower boundaries, [[0.21, 0, 0.1]]
@@ -73,7 +68,7 @@ class TestGraph():
         detailedWarnings = False      # Optional boolean for detailed feedback
 
 
-        self.mySweep = sweep(NO_OF_PARTICLES,LB, UB, MIN_RES, MAX_RES, 
+        self.mySweep = sweep(NO_OF_PARTICLES,LB, UB, STEP_RES, 
                         OUT_VARS, TARGETS, E_TOL, MAXIT,
                         SEARCH_METHOD, func_F, constr_F, parent, detailedWarnings)  
             
@@ -99,6 +94,9 @@ class TestGraph():
         self.ax2.set_zlabel('Z')
         self.scatter2 = None
 
+        # colors
+        self.colors = np.random.rand(NO_OF_PARTICLES, 3)  # Each row is an RGB color
+
 
     def debug_message_printout(self, txt):
         if txt is None:
@@ -108,19 +106,11 @@ class TestGraph():
         msg = "[" + str(curTime) +"] " + str(txt)
         print(msg)
 
-
-    def record_params(self):
-        # this function is called from particle_swarm.py to trigger a write to a log file
-        # running in the AntennaCAT GUI to record the parameter iteration that caused an error
-        pass
-         
-
     def update_plot(self, x_coords, y_coords, targets, showTarget=True, clearAx=True):
         
         # check if any points. first call might not have anythign set yet.
         if len(x_coords) < 1:
             return 
-
 
         if clearAx == True:
             self.ax1.clear() #use this to git rid of the 'ant tunnel' trails
@@ -132,41 +122,45 @@ class TestGraph():
             self.ax1.set_title("Search Locations, Iteration: " + str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("filler coords")
-            self.scatter = self.ax1.scatter(x_coords, x_plot_coords, edgecolors='b')   
+            self.ax1.set_zlabel("filler coords")
+            self.scatter = self.ax1.scatter(x_coords, x_plot_coords, c=self.colors, edgecolors='b')   #use edge color incase random is too light
         
         elif np.shape(x_coords)[1] == 2: #2-dim func
             self.ax1.set_title("Search Locations, Iteration: " + str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
-            self.scatter = self.ax1.scatter(x_coords[:,0], x_coords[:,1], edgecolors='b')
+            self.ax1.set_zlabel("filler coords")
+            self.scatter = self.ax1.scatter(x_coords[:,0], x_coords[:,1], c=self.colors, edgecolors='b')
 
         elif np.shape(x_coords)[1] == 3: #3-dim func
             self.ax1.set_title("Search Locations, Iteration: " + str(self.ctr))
             self.ax1.set_xlabel("$x_1$")
             self.ax1.set_ylabel("$x_2$")
             self.ax1.set_zlabel("$x_3$")
-            self.scatter = self.ax1.scatter(x_coords[:,0], x_coords[:,1], x_coords[:,2], edgecolors='b')
+            self.scatter = self.ax1.scatter(x_coords[:,0], x_coords[:,1], x_coords[:,2], c=self.colors, edgecolors='b')
 
 
         # FITNESS PLOT
         if np.shape(y_coords)[1] == 1: #1-dim obj func
             y_plot_filler = np.array(y_coords[:,0])*0.0
             self.ax2.set_title("Global Best Fitness Relation to Target")
-            self.ax2.set_xlabel("$F_{1}(x,y)$")
+            self.ax2.set_xlabel("$F_{1}(x_1,x_1)$")
             self.ax2.set_ylabel("filler coords")
+            self.ax2.set_zlabel("filler coords")
             self.scatter = self.ax2.scatter(y_coords, y_plot_filler,  marker='o', s=40, facecolor="none", edgecolors="k")
 
         elif np.shape(y_coords)[1] == 2: #2-dim obj func
             self.ax2.set_title("Global Best Fitness Relation to Target")
-            self.ax2.set_xlabel("$F_{1}(x,y)$")
-            self.ax2.set_ylabel("$F_{2}(x,y)$")
+            self.ax2.set_xlabel("$F_{1}(x_1,x_1)$")
+            self.ax2.set_ylabel("$F_{2}(x_1,x_1)$")
+            self.ax2.set_zlabel("filler coords")
             self.scatter = self.ax2.scatter(y_coords[:,0], y_coords[:,1], marker='o', s=40, facecolor="none", edgecolors="k")
 
         elif np.shape(y_coords)[1] == 3: #3-dim obj fun
             self.ax2.set_title("Global Best Fitness Relation to Target")
-            self.ax2.set_xlabel("$F_{1}(x,y)$")
-            self.ax2.set_ylabel("$F_{2}(x,y)$")
-            self.ax2.set_zlabel("$F_{3}(x,y)$")
+            self.ax2.set_xlabel("$F_{1}(x_1,x_1)$")
+            self.ax2.set_ylabel("$F_{2}(x_1,x_1)$")
+            self.ax2.set_zlabel("$F_{3}(x_1,x_1)$")
             self.scatter = self.ax2.scatter(y_coords[:,0], y_coords[:,1], y_coords[:,2], marker='o', s=40, facecolor="none", edgecolors="k")
 
 
