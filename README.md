@@ -74,27 +74,27 @@ More search types will be added, but for initial deployment, a standard grid sea
 The variables from PSO_python have been reused to retain modularity with AntennaCAT and provide some consistency between optimizers. 
 
 ```
-            self.M                      : An array of current search location(s).
-            self.output_size            : An integer value for the output size of obj func
-            self.Active                 : An array indicating the activity status of each particle.
-            self.Gb                     : Global best position, initialized with a large value.
-            self.F_Gb                   : Fitness value corresponding to the global best position.
-            self.targets                : Target values for the optimization process.
-            self.min_search_res         : Minimum search resolution value array.
-            self.max_search_res         : Maximum search resolution value array.
-            self.search_resolution      : Current search resolutions.      
-            self.maxit                  : Maximum number of iterations.
-            self.E_TOL                  : Error tolerance.
-            self.obj_func               : Objective function to be optimized.      
-            self.constr_func            : Constraint function.  
-            self.iter                   : Current iteration count.
-            self.current_particle       : Index of the current particle being evaluated.
-            self.number_of_particles    : Total number of particles. 
-            self.allow_update           : Flag indicating whether to allow updates.
-            self.search_method          : search method for the optimization problem.
-            self.Flist                  : List to store fitness values.
-            self.Fvals                  : List to store fitness values.
-            self.Mlast                  : Last search location
+                self.M                      : An array of current search location(s).
+                self.output_size            : An integer value for the output size of obj func
+                self.Active                 : An array indicating the activity status of each particle.
+                self.Gb                     : Global best position, initialized with a large value.
+                self.F_Gb                   : Fitness value corresponding to the global best position.
+                self.targets                : Target values for the optimization process.
+                self.search_resolution      : Step search resolutions.      
+                self.current_step           : Current step increment.
+                self.maxit                  : Maximum number of iterations.
+                self.E_TOL                  : Error tolerance.
+                self.obj_func               : Objective function to be optimized.      
+                self.constr_func            : Constraint function.  
+                self.iter                   : Current iteration count.
+                self.current_particle       : Index of the current particle being evaluated.
+                self.number_of_particles    : Total number of particles. 
+                self.allow_update           : Flag indicating whether to allow updates.
+                self.search_method          : search method for the optimization problem.
+                self.Flist                  : List to store fitness values.
+                self.Fvals                  : List to store fitness values.
+                self.Mlast                  : Last search location
+               
 ```
 
 ```python
@@ -110,7 +110,6 @@ The variables from PSO_python have been reused to retain modularity with Antenna
         E_TOL = 10 ** -3                 # Convergence Tolerance. For Sweep, this should be a larger value
         MAXIT = 5000                     # Maximumuseful for debug)
         SEARCH_METHOD = 1                # int search 1 = basic_grid, 2 = random_search
-                                               
 
 ```
 
