@@ -16,17 +16,17 @@ import time
 from sweep import sweep
 
 # OBJECTIVE FUNCTION SELECTION
-import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
+#import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
 #import himmelblau.configs_F as func_configs         # single objective, 2D input
-#import lundquist_3_var.configs_F as func_configs     # multi objective function
+import lundquist_3_var.configs_F as func_configs     # multi objective function
 
 
 class TestDetails():
     def __init__(self):
         # Constant variables
         NO_OF_PARTICLES = 4             # Number of indpendent agents searching the space
-        MIN_RES = [[0.01, 0.02, 0.01]]  # Minimum resolution for search
-        MAX_RES = [[0.01, 0.02, 0.01]]  # Maximum resolution for search
+        MIN_RES = [0.1]                 # min resolution for search
+        MAX_RES = [1.1]                 # min resolution for search
         E_TOL = 10 ** -6                # Convergence Tolerance
         MAXIT = 10000                   # Maximum allowed iterations
         SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
@@ -62,13 +62,14 @@ class TestDetails():
 
 
 
-        self.mySweep = sweep(NO_OF_PARTICLES,LB, UB, MIN_RES, MAX_RES, 
-                        OUT_VARS, TARGETS, E_TOL, MAXIT,
-                        SEARCH_METHOD, func_F, constr_F, parent, detailedWarnings)  
+        self.mySweep = sweep(NO_OF_PARTICLES, LB, UB, 
+                    OUT_VARS, TARGETS, 
+                    E_TOL, MAXIT,
+                    func_F, constr_F,
+                    SEARCH_METHOD, MIN_RES, MAX_RES)  
 
 
-
-    def debug_message_printout(self, txt):
+    def updateStatusText(self, txt):
         if txt is None:
             return
         # sets the string as it gets it

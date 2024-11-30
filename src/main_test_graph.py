@@ -19,26 +19,21 @@ import matplotlib.pyplot as plt
 from sweep import sweep
 
 # OBJECTIVE FUNCTION SELECTION
-import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
+#import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
 #import himmelblau.configs_F as func_configs         # single objective, 2D input
-#import lundquist_3_var.configs_F as func_configs     # multi objective function
+import lundquist_3_var.configs_F as func_configs     # multi objective function
 
 
 class TestGraph():
     def __init__(self):
         self.ctr = 0
 
-        NO_OF_PARTICLES = 10             # Number of indpendent agents searching the space
+        NO_OF_PARTICLES = 1             # Number of indpendent agents searching the space
+        MIN_RES = [0.3]                 # min resolution for search
+        MAX_RES = [1.1]                 # min resolution for search
         E_TOL = 10 ** -15                # Convergence Tolerance
         MAXIT = 10000                   # Maximum allowed iterations
-        SEARCH_METHOD = 1               # int search 1 = basic_grid, 2 = random_search
-
-        #NOTE: resolution should match the LB and UB formats. If it is
-        # a higher dimensionality, ALL combinations of that non-applicable
-        # dimensionality will be searched
-        #STEP_RES = [[0.1, 0.2, 0.1]]  # resolution for search
-        STEP_RES = [[0.03]]  # resolution for search
-        #STEP_RES = [[0.5, 0.5]]
+        SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
 
         # Objective function dependent variables
         LB = func_configs.LB                    # Lower boundaries, [[0.21, 0, 0.1]]
@@ -68,10 +63,11 @@ class TestGraph():
         detailedWarnings = False      # Optional boolean for detailed feedback
 
 
-        self.mySweep = sweep(NO_OF_PARTICLES,LB, UB, STEP_RES, 
-                        OUT_VARS, TARGETS, E_TOL, MAXIT,
-                        SEARCH_METHOD, func_F, constr_F, parent, detailedWarnings)  
-            
+        self.mySweep = sweep(NO_OF_PARTICLES, LB, UB, 
+                    OUT_VARS, TARGETS, 
+                    E_TOL, MAXIT,
+                    func_F, constr_F,
+                    SEARCH_METHOD, MIN_RES, MAX_RES)  
 
 
         # Matplotlib setup
@@ -98,7 +94,7 @@ class TestGraph():
         self.colors = np.random.rand(NO_OF_PARTICLES, 3)  # Each row is an RGB color
 
 
-    def debug_message_printout(self, txt):
+    def updateStatusText(self, txt):
         if txt is None:
             return
         # sets the string as it gets it
@@ -107,6 +103,8 @@ class TestGraph():
         print(msg)
 
     def update_plot(self, x_coords, y_coords, targets, showTarget=True, clearAx=True):
+
+        print(x_coords)
         
         # check if any points. first call might not have anythign set yet.
         if len(x_coords) < 1:
