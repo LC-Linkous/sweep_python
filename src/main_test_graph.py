@@ -9,11 +9,12 @@
 #       matplotlib plot of particle location
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: June 26, 2024
+#   Last update: March 13, 2025
 ##--------------------------------------------------------------------\
 
 
 import numpy as np
+import pandas as pd
 import time
 import matplotlib.pyplot as plt
 from sweep import sweep
@@ -31,7 +32,7 @@ class TestGraph():
         NO_OF_PARTICLES = 1             # Number of indpendent agents searching the space
         MIN_RES = [0.3]                 # min resolution for search
         MAX_RES = [1.1]                 # min resolution for search
-        E_TOL = 10 ** -15                # Convergence Tolerance
+        TOL = 10 ** -15                 # Convergence Tolerance
         MAXIT = 10000                   # Maximum allowed iterations
         SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
 
@@ -59,15 +60,18 @@ class TestGraph():
 
         self.allow_update = True      # Allow objective call to update state 
                                       # (can be set on each iteration)
+        # Constant variables
+        opt_params = {'NO_OF_PARTICLES': [NO_OF_PARTICLES],     # Number of indpendent agents searching the space
+                    'SEARCH_METHOD': [SEARCH_METHOD],           # int search 1 = basic_grid, 2 = random_search
+                    'MIN_RES': [MIN_RES],                       # min resolution for search
+                    'MAX_RES': [MAX_RES]}                       # max resolution for search
+            
 
-        detailedWarnings = False      # Optional boolean for detailed feedback
-
-
-        self.mySweep = sweep(NO_OF_PARTICLES, LB, UB, 
-                    OUT_VARS, TARGETS, 
-                    E_TOL, MAXIT,
-                    func_F, constr_F,
-                    SEARCH_METHOD, MIN_RES, MAX_RES)  
+        opt_df = pd.DataFrame(opt_params)
+        self.mySweep = sweep(LB, UB, TARGETS, TOL, MAXIT,
+                                func_F, constr_F,
+                                opt_df,
+                                parent=parent)  
 
 
         # Matplotlib setup

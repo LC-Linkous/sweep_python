@@ -7,11 +7,11 @@
 #   Format updates are for integration in the AntennaCAT GUI.
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: June 19, 2024
+#   Last update: March 13, 2025
 ##--------------------------------------------------------------------\
 
 
-import numpy as np
+import pandas as pd
 import time
 from sweep import sweep
 
@@ -27,7 +27,7 @@ class TestDetails():
         NO_OF_PARTICLES = 4             # Number of indpendent agents searching the space
         MIN_RES = [0.1]                 # min resolution for search
         MAX_RES = [1.1]                 # min resolution for search
-        E_TOL = 10 ** -6                # Convergence Tolerance
+        TOL = 10 ** -6                  # Convergence Tolerance
         MAXIT = 10000                   # Maximum allowed iterations
         SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
 
@@ -54,20 +54,21 @@ class TestDetails():
 
         self.suppress_output = False   # Suppress the console output of particle swarm
 
-        detailedWarnings = False        # Optional boolean for detailed feedback
-                                        # (Independent of suppress output. 
-                                        #  Includes error messages and warnings)
-
         self.allow_update = True      # Allow objective call to update state 
 
 
+        # Constant variables
+        opt_params = {'NO_OF_PARTICLES': [NO_OF_PARTICLES],     # Number of indpendent agents searching the space
+                    'SEARCH_METHOD': [SEARCH_METHOD],           # int search 1 = basic_grid, 2 = random_search
+                    'MIN_RES': [MIN_RES],                       # min resolution for search
+                    'MAX_RES': [MAX_RES]}                       # max resolution for search
+            
 
-        self.mySweep = sweep(NO_OF_PARTICLES, LB, UB, 
-                    OUT_VARS, TARGETS, 
-                    E_TOL, MAXIT,
-                    func_F, constr_F,
-                    SEARCH_METHOD, MIN_RES, MAX_RES)  
-
+        opt_df = pd.DataFrame(opt_params)
+        self.mySweep = sweep(LB, UB, TARGETS, TOL, MAXIT,
+                                func_F, constr_F,
+                                opt_df,
+                                parent=parent)  
 
     def updateStatusText(self, txt):
         if txt is None:

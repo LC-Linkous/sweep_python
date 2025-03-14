@@ -7,18 +7,18 @@
 #   to find the optimial solution based on target values.
 #
 #   Author(s): Lauren Linkous, Jonathan Lundquist
-#   Last update: November 29, 2024
+#   Last update: March 13, 2025
 ##--------------------------------------------------------------------\
 
 
 import numpy as np
+import pandas as pd
 from numpy.random import Generator, MT19937
 import sys
 import time
 np.seterr(all='raise')
 
 
-class sweep:
     # arguments should take form: 
     # sweep(int, [[float, float,...]], [[float, float,...]], 
     #       [[float, float,...]], [[float, float,...]],
@@ -26,20 +26,40 @@ class sweep:
     #        float, int, int,
     #        func, func, obj, bool) 
     # int search_method:  1 = basic_grid, 2 = random_search
-    
-    def __init__(self, NO_OF_PARTICLES, lbound, ubound, 
-                 output_size, targets,
-                 E_TOL, maxit,  
-                 obj_func, constr_func,
-                 search_method, min_res, max_res, 
-                 parent=None, detailedWarnings=False):  
+
         
-                 
+import numpy as np
+from numpy.random import Generator, MT19937, shuffle
+import sys
+np.seterr(all='raise')
+
+
+class sweep:
+    # arguments should take the form: 
+    # swarm([[float, float, ...]], [[float, float, ...]], [[float, ...]], float, int,
+    # func, func,
+    # dataFrame,
+    # class obj) 
+    #  
+    # opt_df contains class-specific tuning parameters
+    # NO_OF_PARTICLES: int
+    # SEARCH_METHOD: int
+    # MIN_RES: arr
+    # MAX_RES: arr
+        
+    def __init__(self,  lbound, ubound, targets,E_TOL, maxit,
+                    obj_func, constr_func, 
+                    opt_df,
+                    parent=None): 
+
         # Optional parent class func call to write out values that trigger constraint issues
         self.parent = parent 
-        # Additional output for advanced debugging to TERMINAL. 
-        # Some of these messages will be returned via debugTigger
-        self.detailedWarnings = detailedWarnings 
+
+        #unpack the opt_df standardized vals
+        NO_OF_PARTICLES = int(opt_df['NO_OF_PARTICLES'][0])
+        search_method = int(opt_df['SEARCH_METHOD'][0])
+        min_res = opt_df['MIN_RES'][0]
+        max_res = opt_df['MAX_RES'][0]
 
         # problem height and width
         heightl = np.shape(lbound)[0]
@@ -111,14 +131,14 @@ class sweep:
             self.Fvals                  : List to store fitness values.
             self.Mlast                  : Last search location
             '''
-            self.output_size = output_size
+            self.output_size = len(targets)
             self.Active = np.ones((NO_OF_PARTICLES))  # not/active if particles finish before others
             self.Gb = sys.maxsize*np.ones((1,np.max([heightl, widthl])))   
-            self.F_Gb = sys.maxsize*np.ones((1,output_size))              
-            self.targets = np.array(targets)
-            self.min_search_res = np.array(min_res)
-            self.max_search_res = np.array(max_res)
-            self.search_resolution = np.array(min_res)
+            self.F_Gb = sys.maxsize*np.ones((1,self.output_size))              
+            self.targets = np.array(targets).reshape(-1, 1)     
+            self.min_search_res = np.array(min_res).reshape(-1, 1)
+            self.max_search_res = np.array(max_res).reshape(-1, 1)
+            self.search_resolution = np.array(min_res).reshape(-1, 1)
             self.maxit = maxit                       
             self.E_TOL = E_TOL                                              
             self.obj_func = obj_func                                             
