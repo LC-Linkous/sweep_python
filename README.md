@@ -2,11 +2,8 @@
 
 Simple sweep optimizer written in Python. 
 
-The approaches in this repo are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
+The approaches in this repository are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
 
-The class format is based off of the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000) for data collection baseline. This repo does not feature any PSO optimization. Instead, the format has been used to retain modularity with other optimizers. Several methods using surrogate models have been moved into their own repositories (Bayesian, Gradient Based Search); see the [directory](#https://github.com/LC-Linkous/Directory) for the most up to date list of optimizers.
-
-Now featuring AntennaCAT hooks for GUI integration and user input handling.
 
 ## Table of Contents
 * [Sweep Optimization](#sweep-optimization)
@@ -31,8 +28,8 @@ Now featuring AntennaCAT hooks for GUI integration and user input handling.
     * [Realtime Graph](#realtime-graph)
 * [References](#references)
 * [Related Publications and Repositories](#related-publications-and-repositories)
-* [How to Cite](#how-to-cite)
 * [Licensing](#licensing)  
+* [How to Cite](#how-to-cite)
 
 ## Sweep Optimization
 
@@ -373,20 +370,22 @@ NOTE: if you close the graph as the code is running, the code will continue to r
 
 This repo does not currently reference any code of papers for the sweep algorithm.
 
-For the original code base, see the [adaptive timestep PSO optimizer](https://github.com/jonathan46000/pso_python) by [jonathan46000](https://github.com/jonathan46000)
-
 ## Related Publications and Repositories
 This software works as a stand-alone implementation, and as one of the optimizers integrated into AntennaCAT.
-
-
-## How to Cite
-
-This is a basic sweep algorithm, and as such is not based on any particular code, repo, or publication.
-
-If you wish to cite this, either cite the repository, or the tie-in AntennaCAT publication
 
 ## Licensing
 
 The code in this repository has been released under GPL-2.0
 
+
+## How to Cite
+
+This code can be referenced using the following DOI:
+
+` `
+
+In IEEE format:
+
+
+L. Linkous, "sweep_python". GitHub, 2024. [Software]. https://github.com/LC-Linkous/sweep_python. DOI: ` `
 

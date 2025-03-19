@@ -8,7 +8,7 @@
 #   This version builds from 'test_details.py' to include a 
 #       matplotlib plot of particle location
 #
-#   Author(s): Lauren Linkous, Jonathan Lundquist
+#   Author(s): Lauren Linkous 
 #   Last update: March 13, 2025
 ##--------------------------------------------------------------------\
 

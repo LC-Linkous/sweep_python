@@ -6,7 +6,7 @@
 #   Parameter sweep class. Iterates through a specified parameter space
 #   to find the optimial solution based on target values.
 #
-#   Author(s): Lauren Linkous, Jonathan Lundquist
+#   Author(s): Lauren Linkous 
 #   Last update: March 13, 2025
 ##--------------------------------------------------------------------\
 
@@ -14,22 +14,6 @@
 import numpy as np
 import pandas as pd
 from numpy.random import Generator, MT19937
-import sys
-import time
-np.seterr(all='raise')
-
-
-    # arguments should take form: 
-    # sweep(int, [[float, float,...]], [[float, float,...]], 
-    #       [[float, float,...]], [[float, float,...]],
-    #        int, [[float, float,...]],
-    #        float, int, int,
-    #        func, func, obj, bool) 
-    # int search_method:  1 = basic_grid, 2 = random_search
-
-        
-import numpy as np
-from numpy.random import Generator, MT19937, shuffle
 import sys
 np.seterr(all='raise')
 
