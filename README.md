@@ -1,5 +1,7 @@
 # sweep_python
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15048577.svg)](https://doi.org/10.5281/zenodo.15048577)
+
 Simple sweep optimizer written in Python. 
 
 The approaches in this repository are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
@@ -349,14 +351,14 @@ Global minima at $(0.974857, -0.954872)$
 <p align="center">
         <img src="media/grid_sweep.gif" alt="Example Grid Sweep Convergence (Attempt)" height="250">
 </p>
-<p align="center">Grid Search. Left: particle search locations, Right: fitness function results (open circles), and target (red star(</p>
+<p align="center">Grid Search. Left: particle search locations, Right: fitness function results (open circles), and target (red star)</p>
 <br>
 <br>
 
 <p align="center">
         <img src="media/random_sweep.gif" alt="Example Random Sweep Convergence (Attempt)" height="250">
 </p>
-<p align="center">Random Search. Left: particle search locations, Right: fitness function results (open circles), and target (red star(</p>
+<p align="center">Random Search. Left: particle search locations, Right: fitness function results (open circles), and target (red star)</p>
 <br>
 <br>
 
@@ -382,10 +384,10 @@ The code in this repository has been released under GPL-2.0
 
 This code can be referenced using the following DOI:
 
-` `
+`10.5281/zenodo.15048577`
 
 In IEEE format:
 
 
-L. Linkous, "sweep_python". GitHub, 2024. [Software]. https://github.com/LC-Linkous/sweep_python. DOI: ` `
+L. Linkous, "sweep_python". GitHub, 2024. [Software]. https://github.com/LC-Linkous/sweep_python. DOI: `10.5281/zenodo.15048577`
 

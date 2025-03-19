@@ -6,6 +6,6 @@ authors:
   orcid: "https://orcid.org/0000-0001-9945-5125"
 title: "sweep_python"
 version: 1.0
-doi:  
+doi:  10.5281/zenodo.15048577
 date-released: {2024}
 url: "https://github.com/LC-Linkous/sweep_python"
