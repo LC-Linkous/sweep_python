@@ -4,7 +4,7 @@
 
 Simple sweep optimizer written in Python. 
 
-The approaches in this repository are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function).
+The approaches in this repository are [exhaustive searches](https://en.wikipedia.org/wiki/Brute-force_search) through a combination of hyperparameters (the inputs for the feasible decision space of the objective function). They're not the fastest, but they're kind of fun to watch. 
 
 
 ## Table of Contents
@@ -22,7 +22,8 @@ The approaches in this repository are [exhaustive searches](https://en.wikipedia
     * [Multi-Object Optimization](#multi-object-optimization)
     * [Objective Function Handling](#objective-function-handling)
       * [Creating a Custom Objective Function](#creating-a-custom-objective-function)
-      * [Internal Objective Function Example](internal-objective-function-example)
+      * [Internal Objective Function Example](#internal-objective-function-example)
+    * [Target vs. Threshold Configuration](#target-vs-threshold-configuration)
 * [Error Handling](#error-handling)
 * [Example Implementations](#example-implementations)
     * [Basic Sweep Example](#basic-sweep-example)
@@ -84,41 +85,44 @@ This is an example for if you've had a difficult time with the requirements.txt 
 
 ```python
     # Constant variables
-    NO_OF_PARTICLES = 11         # Number of particles in swarm
-    TOL = 10 ** -18              # Convergence Tolerance
-    MAXIT = 10000                # Maximum allowed iterations
-    BOUNDARY = 1                 # int boundary 1 = random,      2 = reflecting
-                                 #              3 = absorbing,   4 = invisible
+    NO_OF_PARTICLES = 3             # Number of indpendent agents searching the space
+    MIN_RES = [0.02]                 # min resolution for search
+    MAX_RES = [1.1]                 # max resolution for search
+    TOL = 10 ** -6                  # Convergence Tolerance
+    MAXIT = 50000                   # Maximum allowed iterations
+    SEARCH_METHOD = 1               # int search 1 = basic_grid, 2 = random_search
 
     # Objective function dependent variables
+    LB = func_configs.LB                    # Lower boundaries, [[0.21, 0, 0.1]]
+    UB = func_configs.UB                    # Upper boundaries, [[1, 1, 0.5]]
+    IN_VARS = func_configs.IN_VARS          # Number of input variables (x-values)   
+    OUT_VARS = func_configs.OUT_VARS        # Number of output variables (y-values)
+    TARGETS = func_configs.TARGETS          # Target values for output
+
     func_F = func_configs.OBJECTIVE_FUNC  # objective function
     constr_F = func_configs.CONSTR_FUNC   # constraint function
 
-    LB = func_configs.LB              # Lower boundaries, [[0.21, 0, 0.1]]
-    UB = func_configs.UB              # Upper boundaries, [[1, 1, 0.5]]   
-    OUT_VARS = func_configs.OUT_VARS  # Number of output variables (y-values)
-    TARGETS = func_configs.TARGETS    # Target values for output
+    best_eval = 3          # set higher than normal because of the potential for missing the target
 
-    # optimizer constants
-    WEIGHTS = [[0.5, 0.7, 0.78]]       # Update vector weights
-    BETA = 0.5                         # Float constant controlling influence 
-                                       # between the personal and global best positions
+    parent = None            # Optional parent class for swarm 
+                                        # (Used for passing debug messages or
+                                        # other information that will appear 
+                                        # in GUI panels)
 
-    best_eval = 1
-    parent = None            # for the optimizer test ONLY
-    suppress_output = True   # Suppress the console output of particle swarm
-    allow_update = True      # Allow objective call to update state 
+    evaluate_threshold = True # use target or threshold. True = THRESHOLD, False = EXACT TARGET
+    suppress_output = True    # Suppress the console output of particle swarm
+    allow_update = True       # Allow objective call to update state 
+                                # (can be set on each iteration)
 
     # Constant variables
-    opt_params = {'NO_OF_PARTICLES': [NO_OF_PARTICLES], # Number of particles in swarm
-                'BOUNDARY': [BOUNDARY],                 # int boundary 1 = random,      2 = reflecting
-                                                        #   3 = absorbing,   4 = invisible
-                'WEIGHTS': [WEIGHTS],                   # Update vector weights
-                'BETA':  [BETA] }                       # Float constant controlling influence 
-                                                        #       between the personal and global best positions
+    opt_params = {'NO_OF_PARTICLES': [NO_OF_PARTICLES],     # Number of indpendent agents searching the space
+                'SEARCH_METHOD': [SEARCH_METHOD],           # int search 1 = basic_grid, 2 = random_search
+                'MIN_RES': [MIN_RES],                       # min resolution for search
+                'MAX_RES': [MAX_RES]}                       # max resolution for search
+        
 
     opt_df = pd.DataFrame(opt_params)
-    myOptimizer = swarm(LB, UB, TARGETS, TOL, MAXIT,
+    mySweep = sweep(LB, UB, TARGETS, TOL, MAXIT,
                             func_F, constr_F,
                             opt_df,
                             parent=parent)  
@@ -338,6 +342,41 @@ Local minima at $(0.444453, -0.0630916)$
 
 Global minima at $(0.974857, -0.954872)$
 
+### Target vs. Threshold Configuration
+
+An April 2025 feature is the user ability to toggle TARGET and THRESHOLD evaluation for the optimized values. The key variables for this are:
+
+```python
+# Boolean. use target or threshold. True = THRESHOLD, False = EXACT TARGET
+evaluate_threshold = True  
+
+# array
+TARGETS = func_configs.TARGETS    # Target values for output from function configs
+# OR:
+TARGETS = [0,0,0] #manually set BASED ON PROBLEM DIMENSIONS
+
+# threshold is same dims as TARGETS
+# 0 = use target value as actual target. value should EQUAL target
+# 1 = use as threshold. value should be LESS THAN OR EQUAL to target
+# 2 = use as threshold. value should be GREATER THAN OR EQUAL to target
+#DEFAULT THRESHOLD
+THRESHOLD = np.zeros_like(TARGETS) 
+# OR
+THRESHOLD = [0,1,2] # can be any mix of TARGET and THRESHOLD  
+```
+
+To implement this, the original `self.Flist` objective function calculation has been replaced with the function `objective_function_evaluation`, which returns a numpy array.
+
+The original calculation:
+```python
+self.Flist = abs(self.targets - self.Fvals)
+```
+Where `self.Fvals` is a re-arranged and error checked returned value from the passed in function from `func_F.py` (see examples for the internal objective function or creating a custom objective function). 
+
+When using a THRESHOLD, the `Flist` value corresponding to the target is set to epsilon (the smallest system value) if the evaluated `func_F` value meets the threshold condition for that target item. If the threshold is not met, the absolute value of the difference of the target output and the evaluated output is used. With a THRESHOLD configuration, each value in the numpy array is evaluated individually, so some values can be 'greater than or equal to' the target while others are 'equal' or 'less than or equal to' the target. 
+
+
+
 ## Example Implementations
 
 ### Basic Sweep Example
@@ -382,7 +421,7 @@ The code in this repository has been released under GPL-2.0
 
 ## How to Cite
 
-This code can be referenced using the following DOI:
+The pre-May 2025 code can be referenced using the following DOI:
 
 `10.5281/zenodo.15048577`
 
@@ -390,4 +429,5 @@ In IEEE format:
 
 
 L. Linkous, "sweep_python". GitHub, 2024. [Software]. https://github.com/LC-Linkous/sweep_python. DOI: `10.5281/zenodo.15048577`
+
 
