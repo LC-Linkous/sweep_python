@@ -19,7 +19,7 @@ The approaches in this repository are [exhaustive searches](https://en.wikipedia
     * [Search Types](#search-types)
         * [basic_grid](#basic_grid)
         * [random_search](#random_search)
-    * [Multi-Object Optimization](#multi-object-optimization)
+    * [Multi-Objective Optimization](#multi-objective-optimization)
     * [Objective Function Handling](#objective-function-handling)
       * [Creating a Custom Objective Function](#creating-a-custom-objective-function)
       * [Internal Objective Function Example](#internal-objective-function-example)
@@ -204,7 +204,7 @@ This method does not tend to converge with a small error tolerance.
 The random search generates NO_OF_PARTICLES agents in order to search the defined problem space. Each agent is independent and does not move from its initial generated position. 
 
 
-### Multi-Object Optimization
+### Multi-Objective Optimization
 The no preference method of multi-objective optimization, but a Pareto Front is not calculated. Instead the best choice (smallest norm of output vectors) is listed as the output.
 
 ### Objective Function Handling
