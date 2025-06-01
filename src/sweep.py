@@ -340,7 +340,7 @@ class sweep:
 
     def maxed(self):
         # check if search max iterations hit
-        max_iter = self.iter > self.maxit
+        max_iter = self.iter >= self.maxit
         return max_iter
 
     def active_agents(self):
