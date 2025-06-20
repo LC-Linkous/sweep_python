@@ -24,7 +24,8 @@ class sweep:
     # func, func,
     # dataFrame,
     # class obj, 
-    # bool, [int, int, ...]) 
+    # bool, [int, int, ...], 
+    # int) 
     #  
     # opt_df contains class-specific tuning parameters
     # NO_OF_PARTICLES: int
@@ -33,13 +34,21 @@ class sweep:
     # MAX_RES: arr
         
     def __init__(self,  lbound, ubound, targets,E_TOL, maxit,
-                    obj_func, constr_func, 
-                    opt_df,
-                    parent=None, 
-                   evaluate_threshold=False, obj_threshold=None): 
+                obj_func, constr_func, 
+                opt_df,
+                parent=None, 
+                 evaluate_threshold=False, obj_threshold=None,
+                 decimal_limit = 4): 
+
 
         # Optional parent class func call to write out values that trigger constraint issues
         self.parent = parent 
+
+
+        self.number_decimals = int(decimal_limit)  # limit the number of decimals
+                                              # used in cases where real life has limitations on resolution
+
+
 
         #evaluation method for targets
         # True: Evaluate as true targets
@@ -104,12 +113,12 @@ class sweep:
 
             # use NO_OF_PARTICLES to set if this a multi agent search or not
             # first 'particle'
-            self.M = np.array([lbound])  # at least 1 particle strats at the lower bounds
+            self.M = np.round(np.array([lbound]), self.number_decimals)  # at least 1 particle strats at the lower bounds
 
 
             # any other agents (if they exist they're assigned random starting locs)
             for i in range(2,int(NO_OF_PARTICLES)+1):
-                new_M = np.multiply((self.rng.random((1,np.max([heightl, widthl])))), variation)+ lbound
+                new_M = np.round(np.multiply((self.rng.random((1,np.max([heightl, widthl])))), variation)+ lbound, self.number_decimals)
                 self.M = np.vstack([self.M, new_M])
 
             '''
