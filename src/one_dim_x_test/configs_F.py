@@ -26,9 +26,9 @@ OBJECTIVE_FUNC_NAME = "one_dim_x_test.func_F"
 CONSTR_FUNC_NAME = "one_dim_x_test.constr_F"
 
 # problem dependent variables
-LB = [[0]]             # Lower boundaries
-UB = [[1]]               # Upper boundaries
+LB = [[0.]]             # Lower boundaries
+UB = [[1.]]               # Upper boundaries
 IN_VARS = 1                 # Number of input variables (x-values)
 OUT_VARS = 1                # Number of output variables (y-values) 
-TARGETS = [0]               # Target values for output
+TARGETS = [0.]               # Target values for output
 GLOBAL_MIN = []       # Global minima sample, if they exist. 

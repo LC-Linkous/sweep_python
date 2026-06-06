@@ -113,13 +113,18 @@ class sweep:
 
             # use NO_OF_PARTICLES to set if this a multi agent search or not
             # first 'particle'
-            self.M = np.round(np.array([lbound]), self.number_decimals)  # at least 1 particle strats at the lower bounds
+            # NOTE: dtype=float is REQUIRED. If lbound/ubound are integers, M would
+            # be an integer array and the grid_search resolution increment
+            # (e.g. += 0.3) would round to 0 and stall the sweep. Locations are
+            # continuous, so M must be float regardless of the bound dtype.
+            self.M = np.round(np.array([lbound], dtype=float), self.number_decimals)  # at least 1 particle starts at the lower bounds
 
 
             # any other agents (if they exist they're assigned random starting locs)
             for i in range(2,int(NO_OF_PARTICLES)+1):
                 new_M = np.round(np.multiply((self.rng.random((1,np.max([heightl, widthl])))), variation)+ lbound, self.number_decimals)
                 self.M = np.vstack([self.M, new_M])
+            self.M = self.M.astype(float)  # ensure float dtype for continuous stepping
 
             '''
             self.M                      : An array of current search location(s).
@@ -168,13 +173,6 @@ class sweep:
             self.error_message_generator("sweep successfully initialized")
             
 
-    def error_message_generator(self, msg):
-        # for error messages, but also repurposed for general updates
-        if self.parent == None:
-            print(msg)
-        else:
-            self.parent.debug_message_printout(msg)
-            
     def call_objective(self, allow_update):
 
         if self.Active[self.current_particle]:
@@ -211,15 +209,24 @@ class sweep:
         #epsilon = 10**-18
         #epsilon = 0  # causes issues with imag. numbers
 
-        Flist = np.zeros_like(Fvals)
+        # NOTE: Fvals arrives here as a (1,N) row vector (call_objective uses
+        # reshape(1,-1)), while targets is a (N,1) column. Flatten both to 1-D so
+        # the per-output indexing below works for multi-output objectives (the
+        # previous code indexed a (1,N) array on axis 0, which IndexError'd for
+        # N>1, and the TARGET-default branch broadcast (N,1)-(1,N) to (N,N)).
+        Fvals_flat = np.asarray(Fvals).reshape(-1)
+        targets_flat = np.asarray(targets).reshape(-1)
+
+        Flist = np.zeros(len(Fvals_flat))
 
 
         if self.evaluate_threshold == True: #THRESHOLD
+            obj_threshold_flat = np.asarray(self.obj_threshold).reshape(-1)
             ctr = 0
-            for i in targets:
-                o_thres = int(self.obj_threshold[ctr]) #force type as err check
-                t = targets[ctr]
-                fv = Fvals[ctr]
+            for i in targets_flat:
+                o_thres = int(obj_threshold_flat[ctr].item()) #force type as err check (NumPy 2 safe)
+                t = targets_flat[ctr].item()
+                fv = Fvals_flat[ctr].item()
 
                 if o_thres == 0: #TARGET. default
                     # sets Flist[ctr] as abs distance of  Fvals[ctr] from target
@@ -250,9 +257,9 @@ class sweep:
                 ctr = ctr + 1
 
         else: #TARGET as default
-            # arrays are already the same dimensions. 
-            # no need to loop and compare to anything
-            Flist = abs(targets - Fvals)
+            # both are flattened to 1-D, so this is an element-wise distance
+            # (the previous (N,1)-(1,N) form broadcast to (N,N) for N>1)
+            Flist = abs(targets_flat - Fvals_flat)
 
         return Flist
         
@@ -283,7 +290,7 @@ class sweep:
         current_location = np.array(self.M[particle])
         lbounds = self.lbound.flatten()
         ubounds = self.ubound.flatten()
-        resolution = self.min_search_res[0]  # resolution is a scalar value
+        resolution = self.min_search_res[0].item()  # resolution is a scalar value (NumPy 2: .item() avoids 1-elem array)
 
         N = len(current_location)
         new_location = current_location.copy()

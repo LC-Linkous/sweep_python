@@ -21,8 +21,8 @@ from sweep import sweep
 
 # OBJECTIVE FUNCTION SELECTION
 #import one_dim_x_test.configs_F as func_configs     # single objective, 1D input
-#import himmelblau.configs_F as func_configs         # single objective, 2D input
-import lundquist_3_var.configs_F as func_configs     # multi objective function
+import himmelblau.configs_F as func_configs         # single objective, 2D input
+#import lundquist_3_var.configs_F as func_configs     # multi objective function
 
 
 class TestGraph():
@@ -34,7 +34,7 @@ class TestGraph():
         MAX_RES = [1.1]                 # min resolution for search
         TOL = 10 ** -15                 # Convergence Tolerance
         MAXIT = 10000                   # Maximum allowed iterations
-        SEARCH_METHOD = 2               # int search 1 = basic_grid, 2 = random_search
+        SEARCH_METHOD = 1               # int search 1 = basic_grid, 2 = random_search
 
         # Objective function dependent variables
         LB = func_configs.LB                    # Lower boundaries, [[0.21, 0, 0.1]]

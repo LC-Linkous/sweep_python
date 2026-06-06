@@ -25,9 +25,9 @@ OBJECTIVE_FUNC_NAME = "himmelblau.func_F"
 CONSTR_FUNC_NAME = "himmelblau.constr_F"
 
 # problem dependent variables
-LB = [[-5, -5]]             # Lower boundaries
-UB = [[5, 5]]               # Upper boundaries
+LB = [[-5., -5.]]             # Lower boundaries
+UB = [[5., 5.]]               # Upper boundaries
 IN_VARS = 2                 # Number of input variables (x-values)
 OUT_VARS = 1                # Number of output variables (y-values) 
-TARGETS = [0]               # Target values for output
-GLOBAL_MIN = [[3, 2]]       # Global minima sample, if they exist. 
+TARGETS = [0.]               # Target values for output
+GLOBAL_MIN = [[3., 2.]]       # Global minima sample, if they exist. 
